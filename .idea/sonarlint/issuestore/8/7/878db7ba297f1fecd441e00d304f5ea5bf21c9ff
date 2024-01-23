@@ -1,3 +1,13 @@
 
 _
-java:S2094"BRemove this empty class, write its code or make it an "interface".(€÷Ôá8¹œ÷¬Ó1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8ÉÀÏ²Ó1
+C
+java:S1452'"&Remove usage of generic wildcard type.(®¸‘´8‡òË²Ó1
+H
+java:S1452G"&Remove usage of generic wildcard type.(«¥¨±ùÿÿÿÿ8‹òË²Ó1
+d
+java:S1128"BRemove this unused import 'com.netflix.discovery.converters.Auto'.(Ý¼’²ùÿÿÿÿ8ÐÝË²Ó1
+Q
+java:S1128"/Remove this unused import 'jakarta.ws.rs.Path'.(·Ñé‚úÿÿÿÿ8ÑÝË²Ó1
+Q
+java:S1128"/Remove this unused import 'java.util.Optional'.(¨˜ëÝüÿÿÿÿ8ÑÝË²Ó1
