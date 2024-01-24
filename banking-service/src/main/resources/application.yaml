@@ -1,0 +1,20 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: BANK-SERVICE
+  datasource:
+    url: jdbc:mysql://localhost:3306/vgbankingdb
+    username: root
+    password: Johns@2000
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true

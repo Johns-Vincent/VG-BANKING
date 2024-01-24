@@ -1,0 +1,16 @@
+
+_
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8—ï¼Ó1
+|
+java:S3305"ZInject this field value directly into "securityFilterChain", the only method that uses it.(Êˆ¸»ıÿÿÿÿ8™ï¼Ó1
+X
+java:S1874";Remove this use of "NoOpPasswordEncoder"; it is deprecated.(å‰ö8ï¼Ó1
+]	java:S125&"<This block of commented-out lines of code should be removed.(Â‚ã¾ùÿÿÿÿ8¥ï¼Ó1
+d
+java:S1128"BRemove this unused import 'com.netflix.discovery.converters.Auto'.(İ¼’²ùÿÿÿÿ8óĞ—¼Ó1
+
+java:S1128	"€Remove this unused import 'org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder'.(£ØÓ‰8ôĞ—¼Ó1
+˜
+java:S1128"vRemove this unused import 'org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration'.(Æ­¹¬øÿÿÿÿ8üĞ—¼Ó1
+
+java:S1128"]Remove this unused import 'org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder'.(åÅÚ…ûÿÿÿÿ8ƒİÛ¼Ó1
