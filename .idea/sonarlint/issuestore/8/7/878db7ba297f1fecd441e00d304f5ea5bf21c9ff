@@ -1,10 +1,10 @@
 
 m
 java:S2259œ"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8õÏØÓ1
-m
-java:S2259Š"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8õÏØÓ1
 d
 java:S2259‡"FA "NullPointerException" could be thrown; "accounts" is nullable here.(µ¥‚8õÏØÓ1
+m
+java:S2259Š"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8õÏØÓ1
 _
 java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8‘õÏØÓ1
 _

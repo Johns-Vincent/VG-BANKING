@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.util.UUID;
 
+//Hi there
+
 @Entity
 @Table(name="bankacc_table")
 public class BankAccount {
