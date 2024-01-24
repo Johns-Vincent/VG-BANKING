@@ -2,6 +2,7 @@ package com.deloittevg.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 //Hi there
@@ -27,12 +28,22 @@ public class BankAccount {
 	private String middleName;
 	private String lastName;
 	private String suffix;
+	private String nickname;
 	private boolean primaryBank;
 	private String status;
 	private String authenticationMethod;
 	private String transactionType;
 	private String communicationChannel;
 	private long userId;
+	
+	private int ownernameUpdateCount;
+	private LocalDate lastOwnernameUpdate;
+	
+	public void ownernameUpdatesCount() {
+		ownernameUpdateCount++;
+		lastOwnernameUpdate = LocalDate.now();
+		
+	}
 	
 	
 	 @PrePersist
@@ -51,6 +62,34 @@ public class BankAccount {
 
 	public long getUserId() {
 		return userId;
+	}
+
+	public int getOwnernameUpdateCount() {
+		return ownernameUpdateCount;
+	}
+
+
+	public void setOwnernameUpdateCount(int ownernameUpdateCount) {
+		this.ownernameUpdateCount = ownernameUpdateCount;
+	}
+
+
+	public LocalDate getLastOwnernameUpdate() {
+		return lastOwnernameUpdate;
+	}
+
+
+	public void setLastOwnernameUpdate(LocalDate lastOwnernameUpdate) {
+		this.lastOwnernameUpdate = lastOwnernameUpdate;
+	}
+
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public void setUserId(long userId) {

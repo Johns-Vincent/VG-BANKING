@@ -61,7 +61,7 @@ public class BankController {
 				return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
 			} else {
 				account1.setAccountNo(accountNo);
-				bankAccountService.updateAccount(account);
+				bankAccountService.updateAccount(account1, account);
 				return new ResponseEntity<>("Account updated successfully !", HttpStatus.OK);
 			}
 		} catch (Exception e) {
