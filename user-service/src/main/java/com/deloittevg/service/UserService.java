@@ -15,5 +15,4 @@ public interface UserService {
     User searchByEmail(String email);
 
     void deleteUser(long userId);
-
 }

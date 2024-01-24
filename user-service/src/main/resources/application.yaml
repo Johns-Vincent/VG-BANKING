@@ -12,9 +12,21 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ea0d55ec585ca6edb5c1
+            clientSecret: aef512e6e1b9707fd3d372543a6f99d4fc5f881a
 eureka:
   instance:
     prefer-ip-address: true
   client:
     fetch-registry: true
     register-with-eureka: true
+
+logging:
+  level:
+    org.springframework.security: TRACE
+
