@@ -12,8 +12,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -36,6 +38,14 @@ public class UserController {
         else{
             return "Error: User not found";
         }
+    }
+
+    @GetMapping("/details")
+    public RedirectView redirectToConsole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.searchByEmail(username);
+        return new RedirectView("/user/" + user.getUserId() + "/details");
     }
 
     @PostMapping("/register")
@@ -118,13 +128,37 @@ public class UserController {
 
 
     @PostMapping("{userId}/accounts/open-account")
-    public ResponseEntity<String>viewAccountsByUser(@RequestBody BankAccount bankAccount,@PathVariable long userId){
+    public ResponseEntity<String>openAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId){
         try{
             bankAccount.setUserId(userId);
-            List<BankAccount> accounts = bankingFeign.openAccount(bankAccount).getBody();
+            List<BankAccount> accounts = bankingFeign.viewAccountsByUser(userId).getBody();
+            if(accounts.isEmpty()) {
+                BankAccount bankAccount1 = bankingFeign.openAccount(bankAccount).getBody();
+                return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
+                        + bankAccount1.getAccountNo(), HttpStatus.OK);
+            }
+            else{
+                int checkingCount = 0;
+                for(BankAccount account: accounts) {
+                    if (account.getAccountType().equalsIgnoreCase("checking")) {
+                        checkingCount += 1;
+                    }
+                }
+                if(accounts.size() >= 3){
+                    return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 3 accounts permitted per user", HttpStatus.OK);
+                }
+                else if(bankAccount.getAccountType().equalsIgnoreCase("checking") &&  checkingCount >= 2){
+                    return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user", HttpStatus.OK);
+                }
+                else{
+                    BankAccount bankAccount1 = bankingFeign.openAccount(bankAccount).getBody();
+                    return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
+                            +bankAccount1.getAccountNo(), HttpStatus.OK);
+                }
+            }
         }
         catch(Exception ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No accounts found");
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error: "+ex.getMessage());
         }
     }
 }

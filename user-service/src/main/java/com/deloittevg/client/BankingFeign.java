@@ -15,5 +15,5 @@ public interface BankingFeign {
     public ResponseEntity<List<BankAccount>> viewAccountsByUser(@PathVariable long userId);
 
     @PostMapping("/bank/accounts/create")
-    public BankAccount openAccount(BankAccount bankAccount);
+    public ResponseEntity<BankAccount> openAccount(BankAccount bankAccount);
 }
