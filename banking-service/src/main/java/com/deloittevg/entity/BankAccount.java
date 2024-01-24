@@ -14,7 +14,6 @@ public class BankAccount {
 			pkColumnValue = "acc",
 			valueColumnName = "acc_value",
 			allocationSize = 1)
-	//@GenericGenerator(name = "random_id_generator",strategy = "com.deloitte.RandomIdGenenrator")
 	@Id
 	private String accountNo;
 	private long bankId;

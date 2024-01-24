@@ -116,4 +116,15 @@ public class UserController {
         }
     }
 
+
+    @PostMapping("{userId}/accounts/open-account")
+    public ResponseEntity<String>viewAccountsByUser(@RequestBody BankAccount bankAccount,@PathVariable long userId){
+        try{
+            bankAccount.setUserId(userId);
+            List<BankAccount> accounts = bankingFeign.openAccount(bankAccount).getBody();
+        }
+        catch(Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No accounts found");
+        }
+    }
 }

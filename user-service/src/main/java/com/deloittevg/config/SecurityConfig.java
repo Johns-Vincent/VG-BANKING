@@ -25,7 +25,6 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -35,7 +34,7 @@ public class SecurityConfig {
                     auth.anyRequest().authenticated();
                 })
                 .csrf(AbstractHttpConfigurer::disable)
-                //.oauth2Login(Customizer.withDefaults())
+                .oauth2Login(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .userDetailsService(jpaUserDetailsService)

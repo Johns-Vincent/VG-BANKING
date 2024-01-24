@@ -1,15 +1,19 @@
 
+t
+java:S1192l"RDefine a constant instead of duplicating this literal "No accounts found" 3 times.(¾É†íıÿÿÿÿ8…§ÕÖÓ1
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8êÆĞÓ1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8š§ÕÖÓ1
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ëÆĞÓ1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8š§ÕÖÓ1
 C
-java:S1452*"&Remove usage of generic wildcard type.(®¸‘´8îÆĞÓ1
+java:S1452*"&Remove usage of generic wildcard type.(®¸‘´8§ÕÖÓ1
 H
-java:S1452F"&Remove usage of generic wildcard type.(Âí¿®øÿÿÿÿ8ğÆĞÓ1
+java:S1452F"&Remove usage of generic wildcard type.(Âí¿®øÿÿÿÿ8§ÕÖÓ1
 H
-java:S1452R"&Remove usage of generic wildcard type.(«¥¨±ùÿÿÿÿ8òÆĞÓ1
+java:S1452R"&Remove usage of generic wildcard type.(«¥¨±ùÿÿÿÿ8Ÿ§ÕÖÓ1
 H
-java:S1452h"&Remove usage of generic wildcard type.(çèëÀûÿÿÿÿ8çØÇĞÓ1
-Q
-java:S1128"/Remove this unused import 'jakarta.ws.rs.Path'.(·Ñé‚úÿÿÿÿ8û‰ÏĞÓ1
+java:S1452h"&Remove usage of generic wildcard type.(çèëÀûÿÿÿÿ8 §ÕÖÓ1
+^
+java:S1854|"<Remove this useless assignment to local variable "accounts".(Ô÷Éßúÿÿÿÿ8¡§ÕÖÓ1
+O
+java:S1481|"-Remove this unused "accounts" local variable.(Ô÷Éßúÿÿÿÿ8¡§ÕÖÓ1
