@@ -1,15 +1,15 @@
 
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Åİ‡½Ó1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8êÆĞÓ1
+_
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ëÆĞÓ1
 C
-java:S1452)"&Remove usage of generic wildcard type.(®¸‘´8Õİ‡½Ó1
+java:S1452*"&Remove usage of generic wildcard type.(®¸‘´8îÆĞÓ1
 H
-java:S1452J"&Remove usage of generic wildcard type.(«¥¨±ùÿÿÿÿ8Üİ‡½Ó1
-e
-java:S1128"HRemove this unused import 'com.fasterxml.jackson.annotation.JsonIgnore'.(ş‘‹„8€Ş‡½Ó1
-d
-java:S1128"BRemove this unused import 'com.netflix.discovery.converters.Auto'.(İ¼’²ùÿÿÿÿ8Ş‡½Ó1
+java:S1452F"&Remove usage of generic wildcard type.(Âí¿®øÿÿÿÿ8ğÆĞÓ1
+H
+java:S1452R"&Remove usage of generic wildcard type.(«¥¨±ùÿÿÿÿ8òÆĞÓ1
+H
+java:S1452h"&Remove usage of generic wildcard type.(çèëÀûÿÿÿÿ8çØÇĞÓ1
 Q
-java:S1128"/Remove this unused import 'jakarta.ws.rs.Path'.(·Ñé‚úÿÿÿÿ8Ş‡½Ó1
-Q
-java:S1128"/Remove this unused import 'java.util.Optional'.(¨˜ëİüÿÿÿÿ8‚Ş‡½Ó1
+java:S1128"/Remove this unused import 'jakarta.ws.rs.Path'.(·Ñé‚úÿÿÿÿ8û‰ÏĞÓ1

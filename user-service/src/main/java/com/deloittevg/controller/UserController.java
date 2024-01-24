@@ -1,9 +1,9 @@
 package com.deloittevg.controller;
 
+import com.deloittevg.client.BankingFeign;
+import com.deloittevg.dummy.BankAccount;
 import com.deloittevg.entity.User;
 import com.deloittevg.service.UserService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netflix.discovery.converters.Auto;
 import jakarta.ws.rs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -23,6 +22,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    BankingFeign bankingFeign;
 
     @GetMapping("/login")
     public String userLogin(){
@@ -65,9 +66,16 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public List<User> viewAll(){
-        return userService.viewAll();
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> viewAll(){
+        try{
+            List<User> users = userService.viewAll();
+            return ResponseEntity.status(HttpStatus.OK).body(users);
+        }
+        catch(Exception ex){
+            return new ResponseEntity<>("NOT AUTHORIZED" + ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
     @GetMapping("/{userId}/details")
@@ -89,6 +97,22 @@ public class UserController {
         }
         catch (Exception e) {
             return new ResponseEntity<>("Error, Cannot Delete User !" + e.getMessage(), HttpStatus.NOT_IMPLEMENTED);
+        }
+    }
+
+    @GetMapping("{userId}/accounts")
+    public ResponseEntity<?>viewAccountsByUser(@PathVariable long userId){
+        try{
+            List<BankAccount> accounts = bankingFeign.viewAccountsByUser(userId).getBody();
+            if(accounts == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No accounts found");
+            }
+            else {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(accounts);
+            }
+        }
+        catch(Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No accounts found");
         }
     }
 

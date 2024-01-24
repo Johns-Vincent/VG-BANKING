@@ -57,3 +57,11 @@ Rbanking-service/src/main/java/com/deloittevg/repository/BankAccountRepository.j
 Pbanking-service/src/main/java/com/deloittevg/service/BankAccountServiceImpl.java,b\8\b83c8093182816d56cc55329a57f76e90e476a0e
 |
 Lbanking-service/src/main/java/com/deloittevg/service/BankAccountService.java,a\7\a72f8f5e17ac00bd7392aa4929a912c92fd93356
+t
+Dbanking-service/src/main/java/com/deloittevg/entity/BankAccount.java,0\1\014a3cb371570f10c6387f9f2556cd2464c17823
+k
+;user-service/src/main/java/com/deloittevg/BankingFeign.java,6\1\61cd56cd3ddf96d691b3c9324a6937b2a425f8c1
+p
+@user-service/src/main/java/com/deloittevg/dummy/BankAccount.java,d\0\d02ce93bd328980515ad8ad24e432a579e33732d
+r
+Buser-service/src/main/java/com/deloittevg/client/BankingFeign.java,a\1\a11ca16edfca14d16e89378c1332157aaf613f70
