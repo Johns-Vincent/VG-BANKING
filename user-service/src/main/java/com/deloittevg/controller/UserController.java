@@ -4,7 +4,6 @@ import com.deloittevg.client.BankingFeign;
 import com.deloittevg.dummy.BankAccount;
 import com.deloittevg.entity.User;
 import com.deloittevg.service.UserService;
-import jakarta.ws.rs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -132,7 +132,7 @@ public class UserController {
         try{
             bankAccount.setUserId(userId);
             List<BankAccount> accounts = bankingFeign.viewAccountsByUser(userId).getBody();
-            if(accounts.isEmpty()) {
+            if(accounts == null) {
                 BankAccount bankAccount1 = bankingFeign.openAccount(bankAccount).getBody();
                 return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
                         + bankAccount1.getAccountNo(), HttpStatus.OK);
@@ -161,4 +161,34 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error: "+ex.getMessage());
         }
     }
+
+    @DeleteMapping("{userId}/accounts/{accountNo}/delete")
+    public ResponseEntity<?>deleteAccount(@PathVariable long userId, @PathVariable String accountNo){
+        try {
+            BankAccount account =  bankingFeign.searchByAccountNo(accountNo).getBody();
+            if(account == null){
+                return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
+            }
+
+            else{
+                //Duration duration = Duration.between(account.getCreatedDate(), LocalDateTime.now());
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime createdDate = account.getCreatedDate();
+                long daysBetween = ChronoUnit.DAYS.between(createdDate,now);
+                if(daysBetween <= 30){
+                    return new ResponseEntity<>
+                            ("ACCOUNT CREATED WITHIN 30 DAYS CANNOT BE DELETED\n" +
+                                    "Days remaining to delete this account: "+(30-daysBetween), HttpStatus.OK);
+                }
+                else{
+                    bankingFeign.deleteAccount(accountNo);
+                    return new ResponseEntity<>("Account Deleted Successfully !", HttpStatus.OK);
+                }
+            }
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>("Error, Cannot Delete Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
