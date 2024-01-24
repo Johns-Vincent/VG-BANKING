@@ -3,8 +3,10 @@ package com.deloittevg.client;
 import com.deloittevg.dummy.BankAccount;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -12,4 +14,13 @@ import java.util.List;
 public interface BankingFeign {
     @GetMapping("/bank/accounts/user/{userId}")
     public ResponseEntity<List<BankAccount>> viewAccountsByUser(@PathVariable long userId);
+
+    @PostMapping("/bank/accounts/create")
+    public ResponseEntity<BankAccount> openAccount(BankAccount bankAccount);
+
+    @DeleteMapping("/bank/accounts/{accountNo}/delete")
+    public ResponseEntity<String> deleteAccount(@PathVariable String accountNo);
+
+    @GetMapping("/bank/accounts/{accountNo}")
+    public ResponseEntity<BankAccount> searchByAccountNo(@PathVariable String accountNo);
 }

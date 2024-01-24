@@ -1,2 +1,4 @@
 
-c	java:S107="BConstructor has 15 parameters, which is greater than 7 authorized.(¢â‡ˆýÿÿÿÿ8Ô©²ÍÓ1
+c	java:S107N"BConstructor has 15 parameters, which is greater than 7 authorized.(¢â‡ˆýÿÿÿÿ8Ô©²ÍÓ1
+g
+java:S1128"JRemove this unused import 'com.fasterxml.jackson.annotation.JsonProperty'.(ËÃ§Ï8ÍµÔÝÓ1

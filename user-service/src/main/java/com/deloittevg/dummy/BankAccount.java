@@ -1,6 +1,10 @@
 package com.deloittevg.dummy;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.LocalDateTime;
+
 public class BankAccount{
 	private String accountNo;
 	private long bankId;
@@ -17,7 +21,16 @@ public class BankAccount{
 	private String transactionType;
 	private String communicationChannel;
 	private long userId;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private LocalDateTime createdDate;
 
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
 	public long getUserId() {
 		return userId;
 	}
