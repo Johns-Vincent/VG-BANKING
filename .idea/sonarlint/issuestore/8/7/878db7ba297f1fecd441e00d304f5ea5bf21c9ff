@@ -1,23 +1,21 @@
 
-m
-java:S2259œ"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8õÏØÓ1
-m
-java:S2259Š"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8õÏØÓ1
 d
-java:S2259‡"FA "NullPointerException" could be thrown; "accounts" is nullable here.(µ¥‚8õÏØÓ1
+java:S2259ƒ"FA "NullPointerException" could be thrown; "accounts" is nullable here.(µ¥‚8©õ®øÓ1
+m
+java:S2259˜"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8¨õ®øÓ1
+m
+java:S2259†"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8©õ®øÓ1
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8‘õÏØÓ1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ªõ®øÓ1
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8‘õÏØÓ1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ªõ®øÓ1
 C
-java:S14524"&Remove usage of generic wildcard type.(®¸‘´8–õÏØÓ1
+java:S14525"&Remove usage of generic wildcard type.(®¸‘´8¯õ®øÓ1
 H
-java:S1452P"&Remove usage of generic wildcard type.(Âí¿®øÿÿÿÿ8—õÏØÓ1
+java:S1452K"&Remove usage of generic wildcard type.(Âí¿®øÿÿÿÿ8±õ®øÓ1
 H
-java:S1452\"&Remove usage of generic wildcard type.(«¥¨±ùÿÿÿÿ8™õÏØÓ1
+java:S1452X"&Remove usage of generic wildcard type.(«¥¨±ùÿÿÿÿ8³õ®øÓ1
 H
-java:S1452r"&Remove usage of generic wildcard type.(çèëÀûÿÿÿÿ8™õÏØÓ1
-Q
-java:S1128"/Remove this unused import 'jakarta.ws.rs.Path'.(·Ñé‚úÿÿÿÿ8õÏØÓ1
-Q
-java:S1128"/Remove this unused import 'java.util.Optional'.(¨˜ëİüÿÿÿÿ8õÏØÓ1
+java:S1452n"&Remove usage of generic wildcard type.(çèëÀûÿÿÿÿ8´õ®øÓ1
+D
+java:S1452¢"&Remove usage of generic wildcard type.(Í¼Ó£8ëÚÁúÓ1

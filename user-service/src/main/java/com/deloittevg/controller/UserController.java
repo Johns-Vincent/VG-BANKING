@@ -8,6 +8,7 @@ import jakarta.ws.rs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,20 +50,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?>registerUser(@RequestBody User user){
-        try{
+    public ResponseEntity<?>registerUser(@RequestBody User user) {
+        try {
+            user.setRole("USER");
             User user1 = userService.registerOrUpdate(user);
-            if(user1 != null){
-                String message = "User successfully registered"+"\nUser Name: "
-                        +user.getFirstName()+" "+user.getLastName()+"\nUser ID: "
-                        +user.getUserId();
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(message);
-            }
-            else{
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("User not registered");
-            }
+            return ResponseEntity.status(HttpStatus.OK).body("User registered successfully\nUser ID : "
+            +user1.getUserId());
         }
-        catch(Exception ex) {
+        catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error:" + ex);
         }
 
@@ -76,7 +71,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> viewAll(){
         try{
             List<User> users = userService.viewAll();
@@ -89,6 +84,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/details")
+    @PostAuthorize("returnObject.getBody().userId == 20240101")
     public ResponseEntity<?> viewUserDetails(@PathVariable long userId){
         User user1 =  userService.searchById(userId);
         if(user1 == null){
@@ -160,5 +156,44 @@ public class UserController {
         catch(Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error: "+ex.getMessage());
         }
+    }
+
+    @PostMapping("{userId}/accounts/{accountNo}/update-account")
+    public ResponseEntity<?>updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo){
+        try {
+
+            BankAccount account = bankingFeign.searchByAccountNo(accountNo).getBody();
+            int maxUpdatesPerMonth = 2;
+            if(account == null)
+                return new ResponseEntity<>("Account NOT FOUND with Account No: "
+                        +bankAccount.getAccountNo(), HttpStatus.OK);
+            else {
+                if(bankAccount.getOwnerName().equals(account.getOwnerName())) {
+                    account.setNickName(bankAccount.getNickName());
+                    return new ResponseEntity<>("Account Updated Successfully !", HttpStatus.OK);
+                }
+                else {
+                    LocalDateTime lastUpdatedTime = bankAccount.getLastModifiedDate();
+
+                    if(lastUpdatedTime != null && lastUpdatedTime.getMonth() == LocalDateTime.now().getMonth() && bankAccount.getUpdateCount() >= maxUpdatesPerMonth ) {
+                        return ResponseEntity.badRequest().body("User can only update owner name twice a month.");
+                    }
+                    else {
+                        account.setFirstName(bankAccount.getFirstName());
+                        account.setMiddleName(bankAccount.getMiddleName());
+                        account.setLastName(bankAccount.getLastName());
+                        account.setSuffix(bankAccount.getSuffix());
+                        account.setLastModifiedDate(LocalDateTime.now());
+                        account.setNickName(bankAccount.getNickName());
+                        bankAccount.setUpdateCount(bankAccount.getUpdateCount()+ 1);
+                        return new ResponseEntity<>("Account Updated Successfully !", HttpStatus.OK);
+                    }
+                }
+            }
+        }
+        catch(Exception e){
+            return new ResponseEntity<>("Error, Cannot Update Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
