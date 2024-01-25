@@ -62,7 +62,7 @@ public class BankController {
 			} else {
 				account1.setAccountNo(accountNo);
 				bankAccountService.updateAccount(account);
-				return new ResponseEntity<>("Account updated successfully !", HttpStatus.OK);
+				return new ResponseEntity<>("Account updated successfully !"+account1.getCreatedDate(), HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>("Error, Cannot Update Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -92,7 +92,7 @@ public class BankController {
 		
 		BankAccount account= bankAccountService.findByAccountNo(accountNo);
 		if(account==null) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.status(HttpStatus.OK).build();
 		}
 	
 		return ResponseEntity.status(HttpStatus.OK).body(account);

@@ -4,7 +4,6 @@ import com.deloittevg.client.BankingFeign;
 import com.deloittevg.dummy.BankAccount;
 import com.deloittevg.entity.User;
 import com.deloittevg.service.UserService;
-import jakarta.ws.rs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -128,7 +128,7 @@ public class UserController {
         try{
             bankAccount.setUserId(userId);
             List<BankAccount> accounts = bankingFeign.viewAccountsByUser(userId).getBody();
-            if(accounts.isEmpty()) {
+            if(accounts == null) {
                 BankAccount bankAccount1 = bankingFeign.openAccount(bankAccount).getBody();
                 return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
                         + bankAccount1.getAccountNo(), HttpStatus.OK);
@@ -157,43 +157,33 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error: "+ex.getMessage());
         }
     }
-
-    @PostMapping("{userId}/accounts/{accountNo}/update-account")
-    public ResponseEntity<?>updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo){
+    @DeleteMapping("{userId}/accounts/{accountNo}/delete")
+    public ResponseEntity<?>deleteAccount(@PathVariable long userId, @PathVariable String accountNo){
         try {
+            BankAccount account =  bankingFeign.searchByAccountNo(accountNo).getBody();
+            if(account == null){
+                return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
+            }
 
-            BankAccount account = bankingFeign.searchByAccountNo(accountNo).getBody();
-            int maxUpdatesPerMonth = 2;
-            if(account == null)
-                return new ResponseEntity<>("Account NOT FOUND with Account No: "
-                        +bankAccount.getAccountNo(), HttpStatus.OK);
-            else {
-                if(bankAccount.getOwnerName().equals(account.getOwnerName())) {
-                    account.setNickName(bankAccount.getNickName());
-                    return new ResponseEntity<>("Account Updated Successfully !", HttpStatus.OK);
+            else{
+                //Duration duration = Duration.between(account.getCreatedDate(), LocalDateTime.now());
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime createdDate = account.getCreatedDate();
+                long daysBetween = ChronoUnit.DAYS.between(createdDate,now);
+                if(daysBetween <= 30){
+                    return new ResponseEntity<>
+                            ("ACCOUNT CREATED WITHIN 30 DAYS CANNOT BE DELETED\n" +
+                                    "Days remaining to delete this account: "+(30-daysBetween), HttpStatus.OK);
                 }
-                else {
-                    LocalDateTime lastUpdatedTime = bankAccount.getLastModifiedDate();
-
-                    if(lastUpdatedTime != null && lastUpdatedTime.getMonth() == LocalDateTime.now().getMonth() && bankAccount.getUpdateCount() >= maxUpdatesPerMonth ) {
-                        return ResponseEntity.badRequest().body("User can only update owner name twice a month.");
-                    }
-                    else {
-                        account.setFirstName(bankAccount.getFirstName());
-                        account.setMiddleName(bankAccount.getMiddleName());
-                        account.setLastName(bankAccount.getLastName());
-                        account.setSuffix(bankAccount.getSuffix());
-                        account.setLastModifiedDate(LocalDateTime.now());
-                        account.setNickName(bankAccount.getNickName());
-                        bankAccount.setUpdateCount(bankAccount.getUpdateCount()+ 1);
-                        return new ResponseEntity<>("Account Updated Successfully !", HttpStatus.OK);
-                    }
+                else{
+                    bankingFeign.deleteAccount(accountNo);
+                    return new ResponseEntity<>("Account Deleted Successfully !", HttpStatus.OK);
                 }
             }
         }
-        catch(Exception e){
-            return new ResponseEntity<>("Error, Cannot Update Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        catch (Exception e) {
+            return new ResponseEntity<>("Error, Cannot Delete Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
 }

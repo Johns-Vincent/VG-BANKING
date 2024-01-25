@@ -1,10 +1,17 @@
 package com.deloittevg.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+//Hi there
+
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="bankacc_table")
 public class BankAccount {
 	@TableGenerator(
@@ -30,9 +37,20 @@ public class BankAccount {
 	private String transactionType;
 	private String communicationChannel;
 	private long userId;
-	
-	
-	 @PrePersist
+
+	@Column(updatable = false)
+	@CreatedDate
+	private LocalDateTime createdDate;
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	@PrePersist
 	    private void generaAccountNo() {
 	        // Generate a 16-character alphanumeric user ID
 	        this.accountNo = generateRandomAccountNo();
@@ -73,6 +91,8 @@ public class BankAccount {
 		this.transactionType = transactionType;
 		this.communicationChannel = communicationChannel;
 		this.userId = customerId;
+
+
 	}
 
 	public String getAccountNo() {
@@ -159,8 +179,5 @@ public class BankAccount {
 	public void setCommunicationChannel(String communicationChannel) {
 		this.communicationChannel = communicationChannel;
 	}
-	
-	
-	
 
 }
