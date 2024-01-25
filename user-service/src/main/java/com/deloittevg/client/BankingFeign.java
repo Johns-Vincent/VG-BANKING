@@ -3,10 +3,7 @@ package com.deloittevg.client;
 import com.deloittevg.dummy.BankAccount;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,4 +20,7 @@ public interface BankingFeign {
 
     @GetMapping("/bank/accounts/{accountNo}")
     public ResponseEntity<BankAccount> searchByAccountNo(@PathVariable String accountNo);
+
+    @PutMapping("/bank/accounts/{accountNo}/update")
+    public ResponseEntity<?> updateAccount(@RequestBody BankAccount account,@PathVariable String accountNo);
 }

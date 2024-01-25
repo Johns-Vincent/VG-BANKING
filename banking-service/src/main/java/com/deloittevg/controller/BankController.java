@@ -52,17 +52,15 @@ public class BankController {
 	}
 
 	@PutMapping("/accounts/{accountNo}/update")
-	public ResponseEntity<String> updateAccount(@RequestBody BankAccount account,@PathVariable String accountNo) {
-
+	public ResponseEntity<?> updateAccount(@RequestBody BankAccount account,@PathVariable String accountNo) {
 		try {
 			account.setAccountNo(accountNo);
 			BankAccount account1 = bankAccountService.findByAccountNo(accountNo);
 			if (account1 == null) {
 				return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
 			} else {
-				account1.setAccountNo(accountNo);
 				bankAccountService.updateAccount(account);
-				return new ResponseEntity<>("Account updated successfully !"+account1.getCreatedDate(), HttpStatus.OK);
+				return new ResponseEntity<>(account1, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>("Error, Cannot Update Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -21,8 +21,45 @@ public class BankAccount{
 	private String transactionType;
 	private String communicationChannel;
 	private long userId;
+	private String nickName;
+	private int updateCount;
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private LocalDateTime createdDate;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private LocalDateTime lastModifiedDate;
+	private String ownerName = suffix+" "+firstName+" "+middleName+" "+lastName;
+
+	public int getUpdateCount() {
+		return updateCount;
+	}
+
+	public void setUpdateCount(int updateCount) {
+		this.updateCount = updateCount;
+	}
+
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
@@ -40,6 +77,7 @@ public class BankAccount{
 	}
 
 	public BankAccount() {
+		super();
 	}
 
 	public String getAccountNo() {
@@ -126,8 +164,8 @@ public class BankAccount{
 	public void setCommunicationChannel(String communicationChannel) {
 		this.communicationChannel = communicationChannel;
 	}
-	
-	
-	
+
+
+
 
 }

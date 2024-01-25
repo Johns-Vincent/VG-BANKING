@@ -1,8 +1,8 @@
 package com.deloittevg.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -37,13 +37,39 @@ public class BankAccount {
 	private String transactionType;
 	private String communicationChannel;
 	private long userId;
-
+	private int updateCount;
+	private String nickName;
 	@Column(updatable = false)
 	@CreatedDate
 	private LocalDateTime createdDate;
-
+	@LastModifiedDate
+	private LocalDateTime lastModifiedDate;
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
+	}
+
+	public int getUpdateCount() {
+		return updateCount;
+	}
+
+	public void setUpdateCount(int updateCount) {
+		this.updateCount = updateCount;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
 	}
 
 	public void setCreatedDate(LocalDateTime createdDate) {

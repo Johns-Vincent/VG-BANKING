@@ -185,5 +185,35 @@ public class UserController {
             return new ResponseEntity<>("Error, Cannot Delete Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping("{userId}/accounts/{accountNo}/update-account")
+    public ResponseEntity<?>updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo){
+        try {
+            BankAccount account = bankingFeign.searchByAccountNo(accountNo).getBody();
+            int maxUpdatesPerMonth = 2;
+            if(account == null)
+                return new ResponseEntity<>("Account not found",HttpStatus.NOT_FOUND);
+            else {
+                bankAccount.setUserId(userId);
+                if(bankAccount.getOwnerName().equals(account.getOwnerName())) {
+                    account.setNickName(bankAccount.getNickName());
+                    bankingFeign.updateAccount(account,accountNo);
+                    return new ResponseEntity<>("Account Updated Successfully !", HttpStatus.OK);
+                }
+                else {
+                    LocalDateTime lastUpdatedTime = account.getLastModifiedDate();
+                    if(lastUpdatedTime != null && lastUpdatedTime.getMonth() == LocalDateTime.now().getMonth() && bankAccount.getUpdateCount() >= maxUpdatesPerMonth ) {
+                        return ResponseEntity.badRequest().body("User can only update owner name twice a month.");
+                    }
+                    else {
+                        bankingFeign.updateAccount(account,accountNo);
+                        return new ResponseEntity<>("Account fully Updated Successfully !", HttpStatus.OK);
+                    }
+                }
+            }
+        }
+        catch(Exception e){
+            return new ResponseEntity<>("Error, Cannot Update Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
+    }
 }
