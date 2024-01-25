@@ -2,6 +2,7 @@ package com.deloittevg.dummy;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 
@@ -27,7 +28,8 @@ public class BankAccount{
 	private LocalDateTime createdDate;
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private LocalDateTime lastModifiedDate;
-	private String ownerName = suffix+" "+firstName+" "+middleName+" "+lastName;
+	@Transient
+	private String ownerName;
 
 	public int getUpdateCount() {
 		return updateCount;
@@ -46,7 +48,7 @@ public class BankAccount{
 	}
 
 	public String getOwnerName() {
-		return ownerName;
+		return suffix+" "+firstName+" "+middleName+" "+lastName;
 	}
 
 	public void setOwnerName(String ownerName) {

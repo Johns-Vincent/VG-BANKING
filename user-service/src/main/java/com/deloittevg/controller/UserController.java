@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -166,7 +165,6 @@ public class UserController {
             }
 
             else{
-                //Duration duration = Duration.between(account.getCreatedDate(), LocalDateTime.now());
                 LocalDateTime now = LocalDateTime.now();
                 LocalDateTime createdDate = account.getCreatedDate();
                 long daysBetween = ChronoUnit.DAYS.between(createdDate,now);
@@ -197,16 +195,22 @@ public class UserController {
                 if(bankAccount.getOwnerName().equals(account.getOwnerName())) {
                     account.setNickName(bankAccount.getNickName());
                     bankingFeign.updateAccount(account,accountNo);
-                    return new ResponseEntity<>("Account Updated Successfully !", HttpStatus.OK);
+                    return new ResponseEntity<>("Nickname successfully updated!", HttpStatus.OK);
                 }
                 else {
                     LocalDateTime lastUpdatedTime = account.getLastModifiedDate();
-                    if(lastUpdatedTime != null && lastUpdatedTime.getMonth() == LocalDateTime.now().getMonth() && bankAccount.getUpdateCount() >= maxUpdatesPerMonth ) {
-                        return ResponseEntity.badRequest().body("User can only update owner name twice a month.");
+                    if(lastUpdatedTime != null && lastUpdatedTime.getMonth() == LocalDateTime.now().getMonth() && account.getUpdateCount() >= maxUpdatesPerMonth ) {
+                        return ResponseEntity.badRequest().body("Your name can only be updated twice a month, please try next month");
                     }
                     else {
+                        account.setUpdateCount(account.getUpdateCount()+1);
+                        account.setSuffix(bankAccount.getSuffix());
+                        account.setFirstName(bankAccount.getFirstName());
+                        account.setLastName(bankAccount.getLastName());
+                        account.setMiddleName(bankAccount.getMiddleName());
+                        account.setNickName(bankAccount.getNickName());
                         bankingFeign.updateAccount(account,accountNo);
-                        return new ResponseEntity<>("Account fully Updated Successfully !", HttpStatus.OK);
+                        return new ResponseEntity<>("Owner details updated", HttpStatus.OK);
                     }
                 }
             }

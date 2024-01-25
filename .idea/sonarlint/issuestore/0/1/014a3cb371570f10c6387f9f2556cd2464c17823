@@ -1,2 +1,4 @@
 
-c	java:S107h"BConstructor has 15 parameters, which is greater than 7 authorized.(Άβ‡ύÿÿÿÿ8άδ­ϋΣ1
+c	java:S107i"BConstructor has 15 parameters, which is greater than 7 authorized.(Άβ‡ύÿÿÿÿ8άδ­ϋΣ1
+f
+java:S1128"DRemove this unused import 'org.hibernate.annotations.DynamicUpdate'.(Ϋ­‰Òψÿÿÿÿ8½µÿΣ1
