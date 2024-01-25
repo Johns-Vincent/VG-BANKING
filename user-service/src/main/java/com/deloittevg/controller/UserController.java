@@ -7,6 +7,7 @@ import com.deloittevg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,20 +50,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?>registerUser(@RequestBody User user){
-        try{
+    public ResponseEntity<?>registerUser(@RequestBody User user) {
+        try {
+            user.setRole("USER");
             User user1 = userService.registerOrUpdate(user);
-            if(user1 != null){
-                String message = "User successfully registered"+"\nUser Name: "
-                        +user.getFirstName()+" "+user.getLastName()+"\nUser ID: "
-                        +user.getUserId();
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(message);
-            }
-            else{
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("User not registered");
-            }
+            return ResponseEntity.status(HttpStatus.OK).body("User registered successfully\nUser ID : "
+            +user1.getUserId());
         }
-        catch(Exception ex) {
+        catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error:" + ex);
         }
 
@@ -76,7 +71,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> viewAll(){
         try{
             List<User> users = userService.viewAll();
@@ -89,6 +84,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/details")
+    @PostAuthorize("returnObject.getBody().userId == 20240101")
     public ResponseEntity<?> viewUserDetails(@PathVariable long userId){
         User user1 =  userService.searchById(userId);
         if(user1 == null){
@@ -161,7 +157,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error: "+ex.getMessage());
         }
     }
-
     @DeleteMapping("{userId}/accounts/{accountNo}/delete")
     public ResponseEntity<?>deleteAccount(@PathVariable long userId, @PathVariable String accountNo){
         try {
