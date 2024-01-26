@@ -65,3 +65,5 @@ p
 @user-service/src/main/java/com/deloittevg/dummy/BankAccount.java,d\0\d02ce93bd328980515ad8ad24e432a579e33732d
 r
 Buser-service/src/main/java/com/deloittevg/client/BankingFeign.java,a\1\a11ca16edfca14d16e89378c1332157aaf613f70
+†
+Vuser-service/src/main/java/com/deloittevg/config/AuthorizationServerConfiguration.java,6\7\67d08d636982e7729bc17ee5ff6f8039f1bd91fa

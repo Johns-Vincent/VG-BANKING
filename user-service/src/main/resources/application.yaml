@@ -30,3 +30,8 @@ logging:
   level:
     org.springframework.security: TRACE
 
+keyFile: jwtused.jks
+password: jwtused
+alias: jwtused
+
+providerUrl: http://localhost:8089
