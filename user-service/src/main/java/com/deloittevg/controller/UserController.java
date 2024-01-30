@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -185,40 +183,43 @@ public class UserController {
         }
     }
     @PutMapping("{userId}/accounts/{accountNo}/update-account")
-    public ResponseEntity<?>updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo){
+    public ResponseEntity<?>updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo) {
         try {
             BankAccount account = bankingFeign.searchByAccountNo(accountNo).getBody();
             int maxUpdatesPerMonth = 2;
-            if(account == null)
-                return new ResponseEntity<>("Account not found",HttpStatus.NOT_FOUND);
+            if (account == null) {
+                return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
+            }
             else {
                 bankAccount.setUserId(userId);
-                if(bankAccount.getOwnerName().equals(account.getOwnerName())) {
+                if (bankAccount.getOwnerName().equals(account.getOwnerName())) {
                     account.setNickName(bankAccount.getNickName());
-                    bankingFeign.updateAccount(account,accountNo);
+                    bankingFeign.updateAccount(account, accountNo);
                     return new ResponseEntity<>("Nickname successfully updated!", HttpStatus.OK);
                 }
                 else {
+                    userService.updateAccount(account,bankAccount);
                     LocalDateTime lastUpdatedTime = account.getLastModifiedDate();
-                    if(lastUpdatedTime != null && lastUpdatedTime.getMonth() == LocalDateTime.now().getMonth() && account.getUpdateCount() >= maxUpdatesPerMonth ) {
+                    if (lastUpdatedTime != null && userService.isSameMonth(lastUpdatedTime,LocalDateTime.now()) && account.getUpdateCount() >= maxUpdatesPerMonth) {
                         return ResponseEntity.badRequest().body("Your name can only be updated twice a month, please try next month");
                     }
+                    else if (lastUpdatedTime != null && !userService.isSameMonth(lastUpdatedTime,LocalDateTime.now())) {
+                        account.setUpdateCount(1);
+                        bankingFeign.updateAccount(account, accountNo);
+                        return new ResponseEntity<>("Owner details updated", HttpStatus.OK);
+                    }
                     else {
-                        account.setUpdateCount(account.getUpdateCount()+1);
-                        account.setSuffix(bankAccount.getSuffix());
-                        account.setFirstName(bankAccount.getFirstName());
-                        account.setLastName(bankAccount.getLastName());
-                        account.setMiddleName(bankAccount.getMiddleName());
-                        account.setNickName(bankAccount.getNickName());
-                        bankingFeign.updateAccount(account,accountNo);
+                        account.setUpdateCount(account.getUpdateCount() + 1);
+                        bankingFeign.updateAccount(account, accountNo);
                         return new ResponseEntity<>("Owner details updated", HttpStatus.OK);
                     }
                 }
             }
         }
-        catch(Exception e){
+        catch (Exception e) {
             return new ResponseEntity<>("Error, Cannot Update Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
+
 }
