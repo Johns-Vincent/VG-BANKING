@@ -14,6 +14,9 @@ spring:
     show-sql: true
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8089/oauth2/jwks
       client:
         registration:
           github:
@@ -35,3 +38,9 @@ password: jwtused
 alias: jwtused
 
 providerUrl: http://localhost:8089
+
+springdoc:
+  api-docs:
+    path: /userapi-doc
+  swagger-ui:
+    path: /user-ui
