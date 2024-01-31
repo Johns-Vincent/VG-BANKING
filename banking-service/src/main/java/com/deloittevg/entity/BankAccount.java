@@ -1,5 +1,6 @@
 package com.deloittevg.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -47,7 +48,6 @@ public class BankAccount {
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
-
 	public int getUpdateCount() {
 		return updateCount;
 	}

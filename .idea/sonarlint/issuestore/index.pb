@@ -49,3 +49,5 @@ C
 api-gateway/pom.xml,2\b\2bfa2b108f2439e99e004f4085b58c22cf995f73
 ~
 Napi-gateway/src/main/java/com/deloittevg/apigateway/ApiGatewayApplication.java,e\2\e211e3c9b35759588713caa1c09f022dd1b72c17
+z
+Juser-service/src/test/java/com/deloittevg/UserServiceApplicationTests.java,1\d\1d6bf49da50654863a3c15d562db34ad5169f748

@@ -42,7 +42,9 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?>registerUser(@RequestBody User user) {
         try {
-            user.setRole("USER");
+            if(user.getRole() == null){
+                user.setRole("USER");
+            }
             User user1 = userService.registerOrUpdate(user);
             return ResponseEntity.status(HttpStatus.OK).body("User registered successfully\nUser ID : "
             +user1.getUserId());
