@@ -1,7 +1,6 @@
 package com.deloittevg.config;
 
 import com.deloittevg.service.JpaUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,8 +20,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JpaUserDetailsService jpaUserDetailsService;
+//    @Autowired
+//    private JpaUserDetailsService jpaUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,7 +43,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,JpaUserDetailsService jpaUserDetailsService) throws Exception {
         //oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter())
         return http
                 .authorizeHttpRequests(auth -> {

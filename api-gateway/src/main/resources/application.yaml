@@ -1,0 +1,33 @@
+#API Gateway
+
+server:
+  port: 8095
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: BANK-SERVICE
+            uri: http://localhost:8090/bank
+            predicates:
+              - Path=/bank/**
+          - id: USER-SERVICE
+            uri: http://localhost:8089/user
+            predicates:
+              - Path=/user/**
+#      routes[0]:
+#        id: BANK-SERVICE
+#        uri: http://localhost:8090/bank
+#        predicates[0]: Path=/bank/**
+#      routes[1]:
+#        id: USER-SERVICE
+#        uri: http://localhost:8089/user
+#        predicates[0]: Path=/users/**
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true

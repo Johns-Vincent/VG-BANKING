@@ -45,3 +45,7 @@ r
 Buser-service/src/main/java/com/deloittevg/client/BankingFeign.java,a\1\a11ca16edfca14d16e89378c1332157aaf613f70
 †
 Vuser-service/src/main/java/com/deloittevg/config/AuthorizationServerConfiguration.java,6\7\67d08d636982e7729bc17ee5ff6f8039f1bd91fa
+C
+api-gateway/pom.xml,2\b\2bfa2b108f2439e99e004f4085b58c22cf995f73
+~
+Napi-gateway/src/main/java/com/deloittevg/apigateway/ApiGatewayApplication.java,e\2\e211e3c9b35759588713caa1c09f022dd1b72c17

@@ -7,9 +7,6 @@ import com.deloittevg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -22,15 +19,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     BankingFeign bankingFeign;
 
     @GetMapping("/login")
     public String userLogin(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.searchByEmail(username);
+        User user = userService.getUser();
         if(user != null) {
             return "Welcome " + user.getFirstName() + " " + user.getLastName();
         }
@@ -41,9 +35,7 @@ public class UserController {
 
     @GetMapping("/details")
     public RedirectView redirectToConsole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.searchByEmail(username);
+        User user = userService.getUser();
         return new RedirectView("/user/" + user.getUserId() + "/details");
     }
 
@@ -80,9 +72,8 @@ public class UserController {
         }
 
     }
-
     @GetMapping("/{userId}/details")
-    @PostAuthorize("returnObject.getBody().userId == 20240101")
+//    @PostAuthorize("returnObject.getBody().userId == @userService.getUser().getUserId()")
     public ResponseEntity<?> viewUserDetails(@PathVariable long userId){
         User user1 =  userService.searchById(userId);
         if(user1 == null){

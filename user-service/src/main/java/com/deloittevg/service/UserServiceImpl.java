@@ -4,6 +4,8 @@ import com.deloittevg.dummy.BankAccount;
 import com.deloittevg.entity.User;
 import com.deloittevg.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -52,6 +54,14 @@ public class UserServiceImpl implements UserService{
         account1.setLastName(account2.getLastName());
         account1.setMiddleName(account2.getMiddleName());
         account1.setNickName(account2.getNickName());
+
+    }
+
+    @Override
+    public User getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return searchByEmail(authentication.getName());
+
     }
 
 }

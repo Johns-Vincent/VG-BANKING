@@ -21,4 +21,6 @@ public interface UserService {
     boolean isSameMonth(LocalDateTime l1, LocalDateTime l2);
 
     void updateAccount(BankAccount account1, BankAccount account2);
+
+    User getUser();
 }
