@@ -15,7 +15,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -93,7 +92,6 @@ public class AuthorizationServerConfiguration {
 		try (InputStream fis = this.getClass().getClassLoader().getResourceAsStream(keyFile);) {
 			keyStore.load(fis, alias.toCharArray());
 			return JWKSet.load(keyStore, new PasswordLookup() {
-
 				@Override
 				public char[] lookupPassword(String name) {
 					return password.toCharArray();

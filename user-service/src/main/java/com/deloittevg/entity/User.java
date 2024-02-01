@@ -30,6 +30,7 @@ public class User {
     @NotNull
     @Column(unique = true)
     private String email;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
     private String password;

@@ -1,15 +1,13 @@
 
 E
-java:S1604_"(Make this anonymous inner class a lambda(ìÕÕ¦8ñçœğÕ1
+java:S1604^"(Make this anonymous inner class a lambda(ìÕÕ¦8ñçœğÕ1
 _
-java:S68131"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸èœğÕ1
+java:S68130"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸èœğÕ1
 _
-java:S6813@"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸èœğÕ1
+java:S6813?"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸èœğÕ1
 ƒ
-java:S3305A"aInject this field value directly into "registeredClientRepository", the only method that uses it.(¿ì§’ıÿÿÿÿ8½èœğÕ1
+java:S3305@"aInject this field value directly into "registeredClientRepository", the only method that uses it.(¿ì§’ıÿÿÿÿ8½èœğÕ1
 †
-java:S33052"dInject this field value directly into "authServerSecurityFilterChain", the only method that uses it.(Êˆ¸»ıÿÿÿÿ8½èœğÕ1
+java:S33051"dInject this field value directly into "authServerSecurityFilterChain", the only method that uses it.(Êˆ¸»ıÿÿÿÿ8½èœğÕ1
 X
-java:S6437s"6Revoke and change this password, as it is compromised.(Âİ‚Šüÿÿÿÿ8ÚèœğÕ1
-z
-java:S1128"]Remove this unused import 'org.springframework.security.core.userdetails.UserDetailsService'.(¶…¥à8âèœğÕ1
+java:S6437q"6Revoke and change this password, as it is compromised.(Âİ‚Šüÿÿÿÿ8ÚèœğÕ1
