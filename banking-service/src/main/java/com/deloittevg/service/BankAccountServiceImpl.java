@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,9 @@ public class BankAccountServiceImpl implements BankAccountService{
 
 	@Autowired
 	BankAccountRepository bankAccountRepository;
+	
+	private static final int NAME_UPDATE_LIMIT = 2;
+	
 	@Override
 	public BankAccount createAccount(BankAccount account) {
 		account.setLastModifiedDate(LocalDateTime.now());

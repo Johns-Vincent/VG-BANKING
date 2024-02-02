@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/vguserdb
     username: root
-    password: Johns@2000
+    password: Appartment@007
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
