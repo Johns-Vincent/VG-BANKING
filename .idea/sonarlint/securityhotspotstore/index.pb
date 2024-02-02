@@ -51,3 +51,7 @@ C
 Napi-gateway/src/main/java/com/deloittevg/apigateway/ApiGatewayApplication.java,e\2\e211e3c9b35759588713caa1c09f022dd1b72c17
 z
 Juser-service/src/test/java/com/deloittevg/UserServiceApplicationTests.java,1\d\1d6bf49da50654863a3c15d562db34ad5169f748
+s
+Capi-gateway/src/main/java/com/deloittevg/ApiGatewayApplication.java,a\f\af37ddcf0722786e4aa2f64f6cc9bf36612e3cdf
+€
+Pbanking-service/src/test/java/com/deloittevg/BankingServiceApplicationTests.java,9\0\90bcc9e814a6247ad9646ecf73e8d62bb30de4bb

@@ -45,6 +45,26 @@ public class BankAccount {
 	private LocalDateTime createdDate;
 	@LastModifiedDate
 	private LocalDateTime lastModifiedDate;
+
+	public BankAccount(String accountNo, long bankId, String bankType, String accountType, String accountOwnerType, String firstName, String middleName, String lastName, String nickName,String suffix, boolean primaryBank, String status, String authenticationMethod, String transactionType, String communicationChannel, long userId) {
+		this.accountNo = accountNo;
+		this.bankId = bankId;
+		this.bankType = bankType;
+		this.accountType = accountType;
+		this.accountOwnerType = accountOwnerType;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.suffix = suffix;
+		this.primaryBank = primaryBank;
+		this.status = status;
+		this.authenticationMethod = authenticationMethod;
+		this.transactionType = transactionType;
+		this.communicationChannel = communicationChannel;
+		this.userId = userId;
+		this.nickName = nickName;
+	}
+
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
@@ -101,25 +121,6 @@ public class BankAccount {
 	public BankAccount() {
 	}
 
-	public BankAccount(String accountNo, long bankId, String bankType, String accountType, String accountOwnerType, String firstName, String middleName, String lastName, String suffix, boolean primaryBank, String status, String authenticationMethod, String transactionType, String communicationChannel, long customerId) {
-		this.accountNo = accountNo;
-		this.bankId = bankId;
-		this.bankType = bankType;
-		this.accountType = accountType;
-		this.accountOwnerType = accountOwnerType;
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
-		this.suffix = suffix;
-		this.primaryBank = primaryBank;
-		this.status = status;
-		this.authenticationMethod = authenticationMethod;
-		this.transactionType = transactionType;
-		this.communicationChannel = communicationChannel;
-		this.userId = customerId;
-
-
-	}
 
 	public String getAccountNo() {
 		return accountNo;

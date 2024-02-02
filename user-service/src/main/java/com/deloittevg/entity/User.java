@@ -2,6 +2,7 @@ package com.deloittevg.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -27,12 +28,11 @@ public class User {
     private String job;
     private String jobLocation;
     private String grossSalary;
-    @NotNull
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotNull
+    @Column(nullable = false)
     private String password;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String role;

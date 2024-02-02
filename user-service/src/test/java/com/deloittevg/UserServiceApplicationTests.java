@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +20,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,19 +30,21 @@ class UserServiceApplicationTests {
 	@MockBean
 	private UserRepository userRepository;
 
+	User user1 = new User(123,"Johns","","Vincent","Kannur","Benguluru","Kerala","Analyst","Benguluru","45000","jvk@gmail.com","great","ADMIN");
+	User user2 = new User(124,"James","Thomas","Miller","Mumbai","Benguluru","Mumbai","Analyst","Benguluru","45000","jmay@gmail.com","hello","USER");
+
 	@Autowired
 	private UserService userService;
 	@Test
 	void saveUserTest(){
-		User user = new User(123,"Johns","","Vincent","Kannur","Benguluru","Kerala","Analyst","Benguluru","45000","jvk@gmail.com","great","ADMIN");
+		User user = this.user1;
 		when(userRepository.save(user)).thenReturn(user);
-		assertEquals(user,userService.registerOrUpdate(user));
+		assertEquals(user,userService.registerUser(user));
 		verify(userRepository).save(user);
 	}
 	@Test
 	void getUsersTest(){
-		List<User> users = Arrays.asList(new User(123,"Johns","","Vincent","Kannur","Benguluru","Kerala","Analyst","Benguluru","45000","jvk@gmail.com","great","ADMIN"),
-				new User(124,"James","Thomas","Miller","Mumbai","Benguluru","Mumbai","Analyst","Benguluru","45000","jmay@gmail.com","hello","USER"));
+		List<User> users = Arrays.asList(this.user1,this.user2);
 		when(userRepository.findAll()).thenReturn(users);
 		assertEquals(users,userService.viewAll());
 		verify(userRepository).findAll();
@@ -50,25 +52,34 @@ class UserServiceApplicationTests {
 
 	@Test
 	void deleteUserTest(){
-		User user = new User(123,"Johns","","Vincent","Kannur","Benguluru","Kerala","Analyst","Benguluru","45000","jvk@gmail.com","great","ADMIN");
+		User user = this.user2;
 		userService.deleteUser(user.getUserId());
 		verify(userRepository,times(1)).deleteById(user.getUserId());
 	}
 
 	@Test
 	void searchByUserIdTest(){
-		User user = new User(123,"Johns","","Vincent","Kannur","Benguluru","Kerala","Analyst","Benguluru","45000","jvk@gmail.com","great","ADMIN");
+		User user = this.user1;
 		when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
 		assertEquals(user,userService.searchById(user.getUserId()));
 		verify(userRepository).findById(user.getUserId());
 	}
 	@Test
 	void searchByEmailTest(){
-		User user = new User(123,"Johns","","Vincent","Kannur","Benguluru","Kerala","Analyst","Benguluru","45000","jvk@gmail.com","great","ADMIN");
+		User user = this.user2;
 		when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 		assertEquals(user,userService.searchByEmail(user.getEmail()));
 		verify(userRepository).findByEmail(user.getEmail());
+	}
+
+	@Test
+	void testRegisterUser_EmailNull(){
+		User user = this.user1;
+		user1.setEmail(null);
+		//User user1 = ;
+		assertThrows(IllegalArgumentException.class,()-> userService.registerUser(user));
 
 	}
+
 
 }
