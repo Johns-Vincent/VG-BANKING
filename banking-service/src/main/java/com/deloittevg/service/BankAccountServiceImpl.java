@@ -4,10 +4,12 @@ import com.deloittevg.entity.BankAccount;
 import com.deloittevg.repository.BankAccountRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class BankAccountServiceImpl implements BankAccountService{
 	BankAccountRepository bankAccountRepository;
 	@Override
 	public BankAccount createAccount(BankAccount account) {
+		account.setLastModifiedDate(LocalDateTime.now());
 		return bankAccountRepository.save(account);
 	}
 

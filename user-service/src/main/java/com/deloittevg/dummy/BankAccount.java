@@ -27,7 +27,6 @@ public class BankAccount{
 	private int updateCount;
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private LocalDateTime createdDate;
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private LocalDateTime lastModifiedDate;
 	@Transient
 	private String ownerName;

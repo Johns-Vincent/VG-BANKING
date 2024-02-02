@@ -10,17 +10,17 @@ import java.util.List;
 @FeignClient(name ="BANK-SERVICE")
 public interface BankingFeign {
     @GetMapping("/bank/accounts/user/{userId}")
-    public ResponseEntity<List<BankAccount>> viewAccountsByUser(@PathVariable long userId);
+    public List<BankAccount> viewAccountsByUser(@PathVariable long userId);
 
     @PostMapping("/bank/accounts/create")
     public BankAccount openAccount(BankAccount bankAccount);
 
     @DeleteMapping("/bank/accounts/{accountNo}")
-    public ResponseEntity<String> deleteAccount(@PathVariable String accountNo);
+    public String deleteAccount(@PathVariable String accountNo);
 
     @GetMapping("/bank/accounts/{accountNo}")
-    public ResponseEntity<BankAccount> searchByAccountNo(@PathVariable String accountNo);
+    public BankAccount searchByAccountNo(@PathVariable String accountNo);
 
     @PutMapping("/bank/accounts/{accountNo}/update")
-    public ResponseEntity<?> updateAccount(@RequestBody BankAccount account,@PathVariable String accountNo);
+    public BankAccount updateAccount(@RequestBody BankAccount account,@PathVariable String accountNo);
 }

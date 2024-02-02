@@ -75,10 +75,8 @@ class UserServiceApplicationTests {
 	@Test
 	void testRegisterUser_EmailNull(){
 		User user = this.user1;
-		user1.setEmail(null);
-		//User user1 = ;
+		user.setEmail(null);
 		assertThrows(IllegalArgumentException.class,()-> userService.registerUser(user));
-
 	}
 
 

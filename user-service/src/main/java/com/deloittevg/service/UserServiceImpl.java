@@ -4,7 +4,9 @@ import com.deloittevg.client.BankingFeign;
 import com.deloittevg.dummy.BankAccount;
 import com.deloittevg.entity.User;
 import com.deloittevg.repository.UserRepository;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,14 +85,15 @@ public class UserServiceImpl implements UserService{
         return l1.getYear() == l2.getYear() && l1.getMonth() == l2.getMonth();
     }
 
-    @Override
-    public void updateAccount(BankAccount account1, BankAccount account2) {
+    public void updateAccountDetails(BankAccount account1, BankAccount account2) {
         account1.setSuffix(account2.getSuffix());
         account1.setFirstName(account2.getFirstName());
         account1.setLastName(account2.getLastName());
         account1.setMiddleName(account2.getMiddleName());
-        account1.setNickName(account2.getNickName());
+    }
 
+    public void updateNickName(String nickName, BankAccount bankAccount){
+        bankAccount.setNickName(nickName);
     }
 
     @Override
@@ -111,107 +114,107 @@ public class UserServiceImpl implements UserService{
 
     }
 
-
     @Override
-    public ResponseEntity<List<BankAccount>> viewAccountsByUser(long userId) {
-        try{
-            List<BankAccount> accounts = bankingFeign.viewAccountsByUser(userId).getBody();
-            if(accounts == null){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            else {
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(accounts);
-            }
-        }
-        catch(Exception ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public List<BankAccount> viewAccountsByUser(long userId) {
+        return bankingFeign.viewAccountsByUser(userId);
     }
 
     @Override
-    public ResponseEntity<?> openAccount(long userId,BankAccount bankAccount) {
-        try {
-            bankAccount.setUserId(userId);
-            List<BankAccount> accounts = viewAccountsByUser(userId).getBody();
-            if (accounts == null) {
-                BankAccount account1 = bankingFeign.openAccount(bankAccount);
-                return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
-                        + account1.getAccountNo(), HttpStatus.OK);
+    public ResponseEntity<String> openAccount(long userId,BankAccount bankAccount) {
+        bankAccount.setUserId(userId);
+        List<BankAccount> accounts = viewAccountsByUser(userId);
+        if (accounts == null) {
+            BankAccount account1 = bankingFeign.openAccount(bankAccount);
+            return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
+                    + account1.getAccountNo(), HttpStatus.OK);
+        }
+        else {
+            int checkingCount = 0;
+            for (BankAccount account : accounts) {
+                if (account.getAccountType().equalsIgnoreCase("checking")) {
+                    checkingCount += 1;
+                }
+            }
+            if (accounts.size() >= 3) {
+                return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 3 accounts permitted per user", HttpStatus.NOT_ACCEPTABLE);
+            }
+            else if (bankAccount.getAccountType().equalsIgnoreCase("checking") && checkingCount >= 2) {
+                return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user", HttpStatus.NOT_ACCEPTABLE);
             }
             else {
-                int checkingCount = 0;
-                for (BankAccount account : accounts) {
-                    if (account.getAccountType().equalsIgnoreCase("checking")) {
-                        checkingCount += 1;
-                    }
-                }
-                if (accounts.size() >= 3) {
-                    return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 3 accounts permitted per user", HttpStatus.NOT_ACCEPTABLE);
-                }
-                else if (bankAccount.getAccountType().equalsIgnoreCase("checking") && checkingCount >= 2) {
-                    return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user", HttpStatus.NOT_ACCEPTABLE);
-                }
-                else {
-                    bankingFeign.openAccount(bankAccount);
-                    return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
-                            + bankAccount.getAccountNo(), HttpStatus.OK);
-                }
+                bankingFeign.openAccount(bankAccount);
+                return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
+                        + bankAccount.getAccountNo(), HttpStatus.OK);
             }
-        }
-        catch(Exception ex) {
-            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error: "+ex.getMessage());
         }
     }
 
     @Override
     public ResponseEntity<String> deleteAccount(long userId,String accountNo) {
-        BankAccount account = searchByAccountNo(accountNo).getBody();
+        BankAccount account = searchByAccountNo(accountNo);
         if(account == null){
-            return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found !");
         }
-
         else{
             long daysBetween = ChronoUnit.DAYS.between(account.getCreatedDate(),LocalDateTime.now());
             if(daysBetween <= 30){
-                return new ResponseEntity<>
-                        ("ACCOUNT CREATED WITHIN 30 DAYS CANNOT BE DELETED\n" +
-                                "Days remaining to delete this account: "+(30-daysBetween), HttpStatus.OK);
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+                        .body("ACCOUNT CREATED WITHIN 30 DAYS CANNOT BE DELETED\n"+
+                                "Days remaining to delete this account: "+ (30-daysBetween));
             }
             else{
                 bankingFeign.deleteAccount(accountNo);
-                return new ResponseEntity<>("Account Deleted Successfully !", HttpStatus.OK);
+                return ResponseEntity.status(HttpStatus.OK).body("Account deleted successfully");
             }
         }
     }
+
     @Override
-    public ResponseEntity<BankAccount> searchByAccountNo(String accountNo) {
+    public BankAccount searchByAccountNo(String accountNo) {
         return bankingFeign.searchByAccountNo(accountNo);
     }
+
+
     @Override
     public ResponseEntity<String> updateAccount(BankAccount bankAccount,long userId, String accountNo) {
-        BankAccount account = searchByAccountNo(accountNo).getBody();
+        BankAccount account = searchByAccountNo(accountNo);
         int maxUpdatesPerMonth = 2;
         if (account == null) {
-            return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
         }
         else {
-            bankAccount.setUserId(userId);
             LocalDateTime lastUpdatedTime = account.getLastModifiedDate();
             if (lastUpdatedTime != null && isSameMonth(lastUpdatedTime,LocalDateTime.now()) && account.getUpdateCount() >= maxUpdatesPerMonth) {
-                return new ResponseEntity<>("Your name can only be updated twice a month, please try next month",HttpStatus.NOT_MODIFIED);
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Your name can only be updated twice a month, please try next month");
             }
             else if (lastUpdatedTime != null && !isSameMonth(lastUpdatedTime,LocalDateTime.now())) {
                 account.setUpdateCount(1);
-                bankingFeign.updateAccount(account, accountNo);
+                updateAccountDetails(account,bankAccount);
+                account.setLastModifiedDate(LocalDateTime.now());
+                bankingFeign.updateAccount(account,accountNo);
                 return new ResponseEntity<>("Owner details updated", HttpStatus.OK);
             }
             else {
                 account.setUpdateCount(account.getUpdateCount() + 1);
-                bankingFeign.updateAccount(account, accountNo);
+                updateAccountDetails(account,bankAccount);
+                account.setLastModifiedDate(LocalDateTime.now());
+                bankingFeign.updateAccount(account,accountNo);
                 return new ResponseEntity<>("Owner details updated", HttpStatus.OK);
             }
         }
     }
 
-
+    
+    @Override
+    public ResponseEntity<String> updateNickName(String nickName, String accountNo) {
+        BankAccount bankAccount  = searchByAccountNo(accountNo);
+        if(bankAccount != null){
+            bankAccount.setNickName(nickName);
+            bankingFeign.updateAccount(bankAccount,accountNo);
+            return ResponseEntity.status(HttpStatus.OK).body("Nickname updated");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+    }
 }

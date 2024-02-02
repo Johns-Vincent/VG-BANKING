@@ -43,7 +43,6 @@ public class BankAccount {
 	@Column(updatable = false)
 	@CreatedDate
 	private LocalDateTime createdDate;
-	@LastModifiedDate
 	private LocalDateTime lastModifiedDate;
 
 	public BankAccount(String accountNo, long bankId, String bankType, String accountType, String accountOwnerType, String firstName, String middleName, String lastName, String nickName,String suffix, boolean primaryBank, String status, String authenticationMethod, String transactionType, String communicationChannel, long userId) {

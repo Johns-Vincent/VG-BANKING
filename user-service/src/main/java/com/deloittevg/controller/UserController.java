@@ -64,11 +64,10 @@ public class UserController {
         }
     }
     @GetMapping("/{userId}/details")
-//    @PostAuthorize("returnObject.getBody().userId == @userService.getUser().getUserId()")
-    public ResponseEntity<?> viewUserDetails(@PathVariable long userId){
+    public ResponseEntity<User> viewUserDetails(@PathVariable long userId){
         User user1 =  userService.searchById(userId);
         if(user1 == null){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User Not Found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else{
             return ResponseEntity.status(HttpStatus.OK).body(user1);
@@ -87,8 +86,14 @@ public class UserController {
     }
 
     @GetMapping("{userId}/accounts")
-    public ResponseEntity<?>viewAccountsByUser(@PathVariable long userId){
-        return userService.viewAccountsByUser(userId);
+    public ResponseEntity<List<BankAccount>>viewAccountsByUser(@PathVariable long userId){
+        List<BankAccount> accounts = userService.viewAccountsByUser(userId);
+        if(accounts.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(accounts);
+        }
     }
 
 
@@ -98,13 +103,18 @@ public class UserController {
     }
 
     @DeleteMapping("{userId}/accounts/{accountNo}")
-    public ResponseEntity<?>deleteAccount(@PathVariable long userId, @PathVariable String accountNo){
+    public ResponseEntity<String> deleteAccount(@PathVariable long userId, @PathVariable String accountNo){
         return userService.deleteAccount(userId,accountNo);
     }
 
     @PutMapping("{userId}/accounts/{accountNo}/update-account")
-    public ResponseEntity<?>updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo) {
+    public ResponseEntity<String>updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo) {
         return userService.updateAccount(bankAccount,userId,accountNo);
+    }
+
+    @PutMapping("{userId}/accounts/{accountNo}/update-nickname")
+    public ResponseEntity<String>updateNickName(@RequestBody String nickName,@PathVariable long userId, @PathVariable String accountNo){
+        return userService.updateNickName(nickName,accountNo);
     }
 
 }
