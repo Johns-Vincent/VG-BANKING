@@ -5,18 +5,15 @@ import com.deloittevg.dummy.BankAccount;
 import com.deloittevg.entity.User;
 import com.deloittevg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -24,171 +21,100 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    BankingFeign bankingFeign;
-
     @GetMapping("/login")
     public String userLogin(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.searchByEmail(username);
-        if(user != null) {
-            return "Welcome " + user.getFirstName() + " " + user.getLastName();
-        }
-        else{
-            return "Error: User not found";
-        }
+        return  userService.welcomeUser();
     }
 
     @GetMapping("/details")
     public RedirectView redirectToConsole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.searchByEmail(username);
+        User user = userService.getUserFromAuth();
         return new RedirectView("/user/" + user.getUserId() + "/details");
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?>registerUser(@RequestBody User user){
+    public ResponseEntity<String>registerUser(@RequestBody User user) {
         try{
-            User user1 = userService.registerOrUpdate(user);
-            if(user1 != null){
-                String message = "User successfully registered"+"\nUser Name: "
-                        +user.getFirstName()+" "+user.getLastName()+"\nUser ID: "
-                        +user.getUserId();
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(message);
-            }
-            else{
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("User not registered");
-            }
+            User user1 = userService.registerUser(user);
+            return new ResponseEntity<>("User registered\nUser ID: "+ user1.getUserId(),HttpStatus.OK);
         }
-        catch(Exception ex) {
-            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error:" + ex);
+        catch(IllegalArgumentException ex){
+            return new ResponseEntity<>("User not registered: "+ex.getMessage(),HttpStatus.NOT_IMPLEMENTED);
         }
-
     }
+
     @PutMapping("/{userId}/update")
-    public String updateUser(@RequestBody User user, @PathVariable long userId){
-        user.setUserId(userId);
-        userService.registerOrUpdate(user);
-        return "The user details of "+user.getFirstName()+" "+user.getLastName()+
-                " has been updated.";
+    public ResponseEntity<String> updateUser(@RequestBody User user, @PathVariable long userId){
+        if(userService.updateUser(user,userId) != null){
+            return new ResponseEntity<>("User details of "+user.getFirstName()+" " + user.getLastName()
+            + " has been updated.",HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("No user found",HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> viewAll(){
-        try{
-            List<User> users = userService.viewAll();
-            return ResponseEntity.status(HttpStatus.OK).body(users);
+    public ResponseEntity<List<User>> viewAll(){
+        if(userService.viewAll() != null) {
+            return new ResponseEntity<>(userService.viewAll(), HttpStatus.OK);
         }
-        catch(Exception ex){
-            return new ResponseEntity<>("NOT AUTHORIZED" + ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        else{
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
     }
-
     @GetMapping("/{userId}/details")
-    public ResponseEntity<?> viewUserDetails(@PathVariable long userId){
+    public ResponseEntity<User> viewUserDetails(@PathVariable long userId){
         User user1 =  userService.searchById(userId);
         if(user1 == null){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User Not Found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else{
             return ResponseEntity.status(HttpStatus.OK).body(user1);
         }
     }
 
-    @DeleteMapping("/{userId}/delete")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteAccount(@PathVariable long userId){
-        try {
+        if(userService.searchById(userId) != null){
             userService.deleteUser(userId);
-            return new ResponseEntity<>("User Deleted Successfully !", HttpStatus.OK);
+            return new ResponseEntity<>("User: "+ userId +" deleted",HttpStatus.OK);
         }
-        catch (Exception e) {
-            return new ResponseEntity<>("Error, Cannot Delete User !" + e.getMessage(), HttpStatus.NOT_IMPLEMENTED);
+        else{
+            return new ResponseEntity<>("Account Not Found",HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("{userId}/accounts")
-    public ResponseEntity<?>viewAccountsByUser(@PathVariable long userId){
-        try{
-            List<BankAccount> accounts = bankingFeign.viewAccountsByUser(userId).getBody();
-            if(accounts == null){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No accounts found");
-            }
-            else {
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(accounts);
-            }
+    public ResponseEntity<List<BankAccount>>viewAccountsByUser(@PathVariable long userId){
+        List<BankAccount> accounts = userService.viewAccountsByUser(userId);
+        if(accounts.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        catch(Exception ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No accounts found");
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(accounts);
         }
     }
 
 
     @PostMapping("{userId}/accounts/open-account")
-    public ResponseEntity<String>openAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId){
-        try{
-            bankAccount.setUserId(userId);
-            List<BankAccount> accounts = bankingFeign.viewAccountsByUser(userId).getBody();
-            if(accounts == null) {
-                BankAccount bankAccount1 = bankingFeign.openAccount(bankAccount).getBody();
-                return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
-                        + bankAccount1.getAccountNo(), HttpStatus.OK);
-            }
-            else{
-                int checkingCount = 0;
-                for(BankAccount account: accounts) {
-                    if (account.getAccountType().equalsIgnoreCase("checking")) {
-                        checkingCount += 1;
-                    }
-                }
-                if(accounts.size() >= 3){
-                    return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 3 accounts permitted per user", HttpStatus.OK);
-                }
-                else if(bankAccount.getAccountType().equalsIgnoreCase("checking") &&  checkingCount >= 2){
-                    return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user", HttpStatus.OK);
-                }
-                else{
-                    BankAccount bankAccount1 = bankingFeign.openAccount(bankAccount).getBody();
-                    return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
-                            +bankAccount1.getAccountNo(), HttpStatus.OK);
-                }
-            }
-        }
-        catch(Exception ex) {
-            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Error: "+ex.getMessage());
-        }
+    public ResponseEntity<?>openAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId){
+        return userService.openAccount(userId,bankAccount);
     }
 
-    @DeleteMapping("{userId}/accounts/{accountNo}/delete")
-    public ResponseEntity<?>deleteAccount(@PathVariable long userId, @PathVariable String accountNo){
-        try {
-            BankAccount account =  bankingFeign.searchByAccountNo(accountNo).getBody();
-            if(account == null){
-                return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
-            }
+    @DeleteMapping("{userId}/accounts/{accountNo}")
+    public ResponseEntity<String> deleteAccount(@PathVariable long userId, @PathVariable String accountNo){
+        return userService.deleteAccount(userId,accountNo);
+    }
 
-            else{
-                //Duration duration = Duration.between(account.getCreatedDate(), LocalDateTime.now());
-                LocalDateTime now = LocalDateTime.now();
-                LocalDateTime createdDate = account.getCreatedDate();
-                long daysBetween = ChronoUnit.DAYS.between(createdDate,now);
-                if(daysBetween <= 30){
-                    return new ResponseEntity<>
-                            ("ACCOUNT CREATED WITHIN 30 DAYS CANNOT BE DELETED\n" +
-                                    "Days remaining to delete this account: "+(30-daysBetween), HttpStatus.OK);
-                }
-                else{
-                    bankingFeign.deleteAccount(accountNo);
-                    return new ResponseEntity<>("Account Deleted Successfully !", HttpStatus.OK);
-                }
-            }
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>("Error, Cannot Delete Account !" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PutMapping("{userId}/accounts/{accountNo}/update-account")
+    public ResponseEntity<String>updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo) {
+        return userService.updateAccount(bankAccount,userId,accountNo);
+    }
+
+    @PutMapping("{userId}/accounts/{accountNo}/update-nickname")
+    public ResponseEntity<String>updateNickName(@RequestBody String nickName,@PathVariable long userId, @PathVariable String accountNo){
+        return userService.updateNickName(nickName,accountNo);
     }
 
 }

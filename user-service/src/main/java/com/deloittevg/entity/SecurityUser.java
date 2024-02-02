@@ -1,8 +1,11 @@
 package com.deloittevg.entity;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +13,10 @@ import java.util.Collection;
 public class SecurityUser implements UserDetails {
 
     private User user;
-
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
     public SecurityUser(User user) {
         this.user = user;
     }
@@ -26,7 +32,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return passwordEncoder().encode(user.getPassword());
     }
 
     @Override
