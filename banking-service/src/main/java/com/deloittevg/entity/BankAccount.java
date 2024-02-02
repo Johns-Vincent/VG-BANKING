@@ -1,8 +1,9 @@
 package com.deloittevg.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -37,13 +38,57 @@ public class BankAccount {
 	private String transactionType;
 	private String communicationChannel;
 	private long userId;
-
+	private int updateCount;
+	private String nickName;
 	@Column(updatable = false)
 	@CreatedDate
 	private LocalDateTime createdDate;
+	private LocalDateTime lastModifiedDate;
+
+	public BankAccount(String accountNo, long bankId, String bankType, String accountType, String accountOwnerType, String firstName, String middleName, String lastName, String nickName,String suffix, boolean primaryBank, String status, String authenticationMethod, String transactionType, String communicationChannel, long userId) {
+		this.accountNo = accountNo;
+		this.bankId = bankId;
+		this.bankType = bankType;
+		this.accountType = accountType;
+		this.accountOwnerType = accountOwnerType;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.suffix = suffix;
+		this.primaryBank = primaryBank;
+		this.status = status;
+		this.authenticationMethod = authenticationMethod;
+		this.transactionType = transactionType;
+		this.communicationChannel = communicationChannel;
+		this.userId = userId;
+		this.nickName = nickName;
+	}
 
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
+	}
+	public int getUpdateCount() {
+		return updateCount;
+	}
+
+	public void setUpdateCount(int updateCount) {
+		this.updateCount = updateCount;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
 	}
 
 	public void setCreatedDate(LocalDateTime createdDate) {
@@ -75,25 +120,6 @@ public class BankAccount {
 	public BankAccount() {
 	}
 
-	public BankAccount(String accountNo, long bankId, String bankType, String accountType, String accountOwnerType, String firstName, String middleName, String lastName, String suffix, boolean primaryBank, String status, String authenticationMethod, String transactionType, String communicationChannel, long customerId) {
-		this.accountNo = accountNo;
-		this.bankId = bankId;
-		this.bankType = bankType;
-		this.accountType = accountType;
-		this.accountOwnerType = accountOwnerType;
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
-		this.suffix = suffix;
-		this.primaryBank = primaryBank;
-		this.status = status;
-		this.authenticationMethod = authenticationMethod;
-		this.transactionType = transactionType;
-		this.communicationChannel = communicationChannel;
-		this.userId = customerId;
-
-
-	}
 
 	public String getAccountNo() {
 		return accountNo;

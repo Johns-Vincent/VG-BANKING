@@ -1,21 +1,5 @@
 
-d
-java:S2259ƒ"FA "NullPointerException" could be thrown; "accounts" is nullable here.(µ¥‚8©õ®øÓ1
-m
-java:S2259˜"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8¨õ®øÓ1
-m
-java:S2259†"JA "NullPointerException" could be thrown; "bankAccount1" is nullable here.(Áåìáúÿÿÿÿ8©õ®øÓ1
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8ªõ®øÓ1
-_
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8ªõ®øÓ1
-C
-java:S14525"&Remove usage of generic wildcard type.(®¸‘´8¯õ®øÓ1
+java:S6813"BRemove this field injection and use constructor injection instead.(����8�����1
 H
-java:S1452K"&Remove usage of generic wildcard type.(Âí¿®øÿÿÿÿ8±õ®øÓ1
-H
-java:S1452X"&Remove usage of generic wildcard type.(«¥¨±ùÿÿÿÿ8³õ®øÓ1
-H
-java:S1452n"&Remove usage of generic wildcard type.(çèëÀûÿÿÿÿ8´õ®øÓ1
-D
-java:S1452¢"&Remove usage of generic wildcard type.(Í¼Ó£8ëÚÁúÓ1
+java:S1452e"&Remove usage of generic wildcard type.(Ҧ������8咝��1

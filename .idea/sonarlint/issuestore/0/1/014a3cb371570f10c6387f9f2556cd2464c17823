@@ -1,5 +1,6 @@
 
-c	java:S107N"BConstructor has 15 parameters, which is greater than 7 authorized.(Â¢Ã¢â€¡Ë†Ã½Ã¿Ã¿Ã¿Ã¿8Ã”Â©Â²ÃÃ“1
-g
-java:S1128"JRemove this unused import 'com.fasterxml.jackson.annotation.JsonProperty'.(Ã‹ÃƒÂ§Ã8ÃÂµÃ”ÃÃ“1
-
+c	java:S1070"BConstructor has 16 parameters, which is greater than 7 authorized.(ıíÿÿÿÿÿ8Íƒ ¤Ö1
+e
+java:S1128"HRemove this unused import 'com.fasterxml.jackson.annotation.JsonIgnore'.(ş‘‹„8Øƒ ¤Ö1
+n
+java:S1128"QRemove this unused import 'org.springframework.data.annotation.LastModifiedDate'.(Æğ¼‰8ü«¯ÈÖ1

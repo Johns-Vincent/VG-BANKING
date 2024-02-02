@@ -1,13 +1,11 @@
 
-X
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ
-M
-java:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-M
-java:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-M
-java:S1135"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-M
-java:S1135$"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
-M
-java:S1135*"2Complete the task associated to this TODO comment.(» æÿÿÿÿÿ
+_
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8½Ì÷ÁÖ1
+[
+java:S1128">Remove this unused import 'jakarta.transaction.Transactional'.(ß–Ê³8Èú¹ÈÖ1
+^
+java:S1128"ARemove this unused import 'org.springframework.cglib.core.Local'.(ÁÒû8Éú¹ÈÖ1
+b
+java:S1128"@Remove this unused import 'org.springframework.http.HttpStatus'.(íŸ¤Šúÿÿÿÿ8Éú¹ÈÖ1
+f
+java:S1128	"DRemove this unused import 'org.springframework.http.ResponseEntity'.(¶¯ø¦úÿÿÿÿ8Éú¹ÈÖ1
