@@ -1,6 +1,6 @@
 
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8½Ì÷ÁÖ1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8Ä­âÌÖ1
 [
 java:S1128">Remove this unused import 'jakarta.transaction.Transactional'.(ß–Ê³8Èú¹ÈÖ1
 ^
@@ -9,3 +9,5 @@ b
 java:S1128"@Remove this unused import 'org.springframework.http.HttpStatus'.(íŸ¤Šúÿÿÿÿ8Éú¹ÈÖ1
 f
 java:S1128	"DRemove this unused import 'org.springframework.http.ResponseEntity'.(¶¯ø¦úÿÿÿÿ8Éú¹ÈÖ1
+R
+java:S1068"5Remove this unused "NAME_UPDATE_LIMIT" private field.(Åäòå8Ø­âÌÖ1

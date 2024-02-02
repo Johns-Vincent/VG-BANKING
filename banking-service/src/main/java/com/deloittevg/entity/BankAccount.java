@@ -1,9 +1,7 @@
 package com.deloittevg.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -32,7 +30,6 @@ public class BankAccount {
 	private String middleName;
 	private String lastName;
 	private String suffix;
-	private String nickname;
 	private boolean primaryBank;
 	private String status;
 	private String authenticationMethod;
@@ -114,35 +111,6 @@ public class BankAccount {
 	public long getUserId() {
 		return userId;
 	}
-
-	public int getOwnernameUpdateCount() {
-		return ownernameUpdateCount;
-	}
-
-
-	public void setOwnernameUpdateCount(int ownernameUpdateCount) {
-		this.ownernameUpdateCount = ownernameUpdateCount;
-	}
-
-
-	public LocalDate getLastOwnernameUpdate() {
-		return lastOwnernameUpdate;
-	}
-
-
-	public void setLastOwnernameUpdate(LocalDate lastOwnernameUpdate) {
-		this.lastOwnernameUpdate = lastOwnernameUpdate;
-	}
-
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}

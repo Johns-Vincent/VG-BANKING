@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/vgbankingdb
     username: root
-    password: Appartment@007
+    password: Johns@2000
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

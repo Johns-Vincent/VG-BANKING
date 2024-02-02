@@ -12,7 +12,7 @@ public interface BankAccountService {
 	BankAccount findByAccountNo (String accountNo);
 	void deleteAccount (String accountNo);
 	List<BankAccount> searchByUserId(long userId);
-	BankAccount updateAccount(BankAccount account, BankAccount updatedaccount);
+	BankAccount updateAccount(BankAccount account, String accountNo);
 	
 
 }
