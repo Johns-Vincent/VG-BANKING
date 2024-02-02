@@ -90,6 +90,8 @@ public class UserServiceImpl implements UserService{
         account1.setFirstName(account2.getFirstName());
         account1.setLastName(account2.getLastName());
         account1.setMiddleName(account2.getMiddleName());
+        account1.setLastModifiedDate(LocalDateTime.now());
+        bankingFeign.updateAccount(account1,account1.getAccountNo());
     }
 
     public void updateNickName(String nickName, BankAccount bankAccount){
@@ -190,15 +192,11 @@ public class UserServiceImpl implements UserService{
             else if (lastUpdatedTime != null && !isSameMonth(lastUpdatedTime,LocalDateTime.now())) {
                 account.setUpdateCount(1);
                 updateAccountDetails(account,bankAccount);
-                account.setLastModifiedDate(LocalDateTime.now());
-                bankingFeign.updateAccount(account,accountNo);
                 return new ResponseEntity<>("Owner details updated", HttpStatus.OK);
             }
             else {
                 account.setUpdateCount(account.getUpdateCount() + 1);
                 updateAccountDetails(account,bankAccount);
-                account.setLastModifiedDate(LocalDateTime.now());
-                bankingFeign.updateAccount(account,accountNo);
                 return new ResponseEntity<>("Owner details updated", HttpStatus.OK);
             }
         }

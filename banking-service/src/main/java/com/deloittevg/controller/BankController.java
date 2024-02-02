@@ -5,6 +5,7 @@ import com.deloittevg.service.BankAccountService;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,7 @@ public class BankController {
 	
 	@PostMapping("/accounts/create")
 	public BankAccount createAccount(@RequestBody BankAccount account) {
+		account.setLastModifiedDate(LocalDateTime.now());
 		return bankAccountService.createAccount(account);
 	}
 	@GetMapping ("/accounts/user/{userId}")

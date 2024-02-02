@@ -20,11 +20,8 @@ public class BankAccountServiceImpl implements BankAccountService{
 	@Autowired
 	BankAccountRepository bankAccountRepository;
 	
-	private static final int NAME_UPDATE_LIMIT = 2;
-	
 	@Override
 	public BankAccount createAccount(BankAccount account) {
-		account.setLastModifiedDate(LocalDateTime.now());
 		return bankAccountRepository.save(account);
 	}
 
