@@ -53,3 +53,9 @@ s
 Capi-gateway/src/main/java/com/deloittevg/ApiGatewayApplication.java,a\f\af37ddcf0722786e4aa2f64f6cc9bf36612e3cdf
 Ä
 Pbanking-service/src/test/java/com/deloittevg/BankingServiceApplicationTests.java,9\0\90bcc9e814a6247ad9646ecf73e8d62bb30de4bb
+x
+Hapi-gateway/src/test/java/com/deloittevg/ApiGatewayApplicationTests.java,8\5\85c960930852a296f51905f36b34dbc0be465f32
+ç
+]eureka-server-registry/src/test/java/com/deloittevg/EurekaServerRegistryApplicationTests.java,9\b\9be42908e446ec9cd87958e6649895aa1826a5c7
+x
+Hbanking-service/src/test/java/com/deloittevg/entity/BankAccountTest.java,4\f\4f473f83c20bdfb22c93c324ee6c5c160dc452ca

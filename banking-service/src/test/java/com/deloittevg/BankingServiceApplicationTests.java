@@ -5,9 +5,15 @@ import com.deloittevg.entity.BankAccount;
 import com.deloittevg.repository.BankAccountRepository;
 import com.deloittevg.service.BankAccountService;
 import com.deloittevg.service.BankAccountServiceImpl;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.junit.jupiter.api.Assertions;
@@ -20,31 +26,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class BankingServiceApplicationTests {
 
 
 	BankAccount bankAccount1 = new BankAccount("asdf123dsfg134as",104,"Domestic","Checking","Personal","Johns","James","Jim","Jo","Mr",true,"Active","Phone","Open","Email",20240101);
 	BankAccount bankAccount2 = new BankAccount("asdf123dsfg134as",104,"Domestic","Checking","Personal","Johns","James","Jim","Jo","Mr",true,"Active","Phone","Open","Email",20240101);
+
 	@MockBean
 	private BankAccountRepository bankAccountRepository;
 
 	@Autowired
 	private BankController bankController;
 
-	@Autowired
-	private BankAccountService bankAccountService;
+	@InjectMocks
+	private BankAccountServiceImpl bankAccountService;
+
 
 	@Test
 	void createAccountTest() {
@@ -151,48 +160,87 @@ class BankingServiceApplicationTests {
 		assertEquals(bankAccounts,userAccounts);
 	}
 
-//	@Test
-//	void searchByAccountNo_ControllerTest(){
-//		BankAccount bankAccount = this.bankAccount1;
-//		when(bankAccountService.findByAccountNo("asdf123dsfg134as")).thenReturn(bankAccount);
-//		fetchedAccount = bankController.searchByAccountNo("asdf123dsfg134as");
-//		assertEquals(fetchedAccount,bankAccount);
-//	}
-
-//	@Test
-//	void deleteAccount_ControllerTest(){
-//		BankAccount bankAccount = this.bankAccount1;
-//		String expected ="";
-//		when(bankAccountService.deleteAccount(bankAccount.getAccountNo()),doNothing();
-//		String message = bankController.deleteAccount(bankAccount.getAccountNo());
-//	}
-//
 	@Test
-	void bankAccountConstructorAndGettersTest(){
+	void searchByAccountNo_ControllerTest(){
+		BankAccount bankAccount = this.bankAccount1;
+		when(bankAccountRepository.findById(bankAccount.getAccountNo())).thenReturn(Optional.of(bankAccount));
+		assertEquals(bankAccount,bankController.searchByAccountNo(bankAccount.getAccountNo()));
+	}
+
+	@Test
+	void deleteAccount_ControllerTest(){
+		BankAccount bankAccount = this.bankAccount1;
+		when(bankAccountRepository.findById(bankAccount.getAccountNo())).thenReturn(Optional.of(bankAccount));
+		assertEquals("Account: "+ bankAccount.getAccountNo() +" deleted"
+				,bankController.deleteAccount(bankAccount.getAccountNo()));
+	}
+
+	@Test
+	void deleteAccount_ControllerTest_AccountNull(){
+		BankAccount bankAccount = this.bankAccount1;
+		when(bankAccountRepository.findById(bankAccount.getAccountNo())).thenReturn(Optional.of(bankAccount));
+		assertEquals("No account found"
+				,bankController.deleteAccount("NonExistentAccountNo"));
+	}
+
+
+
+	@Test
+	void bankAccountGettersSettersTest(){
 		BankAccount bankAccount = new BankAccount();
-		bankAccount.setAccountNo(bankAccount1.getAccountNo());
-		bankAccount.setBankId(bankAccount1.getBankId());
-		bankAccount.setBankType(bankAccount1.getBankType());
-		bankAccount.setAccountType(bankAccount1.getAccountType());
-		bankAccount.setAccountOwnerType(bankAccount1.getAccountOwnerType());
-		bankAccount.setFirstName(bankAccount1.getFirstName());
-		bankAccount.setMiddleName(bankAccount1.getMiddleName());
-		bankAccount.setLastName(bankAccount1.getLastName());
-		bankAccount.setSuffix(bankAccount1.getSuffix());
-		bankAccount.setPrimaryBank(bankAccount1.isPrimaryBank());
-		bankAccount.setStatus(bankAccount1.getStatus());
-		bankAccount.setAuthenticationMethod(bankAccount1.getAuthenticationMethod());
-		bankAccount.setTransactionType(bankAccount1.getTransactionType());
-		bankAccount.setCommunicationChannel(bankAccount1.getCommunicationChannel());
-		bankAccount.setUserId(bankAccount1.getUserId());
-		bankAccount.setNickName(bankAccount1.getNickName());
+		bankAccount.setAccountNo("abcd");
+		bankAccount.setBankId(123);
+		bankAccount.setBankType("Domestic");
+		bankAccount.setAccountType("Savings");
+		bankAccount.setAccountOwnerType("Personal");
+		bankAccount.setFirstName("Johns");
+		bankAccount.setMiddleName("");
+		bankAccount.setLastName("Vincent");
+		bankAccount.setSuffix("Mr");
+		bankAccount.setPrimaryBank(true);
+		bankAccount.setStatus("Active");
+		bankAccount.setAuthenticationMethod("Phone");
+		bankAccount.setTransactionType("Open");
+		bankAccount.setCommunicationChannel("Email");
+		bankAccount.setUserId(123);
+		bankAccount.setNickName("Jo");
+		bankAccount.setCreatedDate(LocalDateTime.of(LocalDate.now(), LocalTime.of(1,15)));
+		bankAccount.setLastModifiedDate(LocalDateTime.of(LocalDate.now(), LocalTime.of(1,15)));
+		bankAccount.setUpdateCount(2);
+		assertEquals("abcd",bankAccount.getAccountNo());
+		assertEquals(123,bankAccount.getBankId());
+		assertEquals("Domestic",bankAccount.getBankType());
+		assertEquals("Savings",bankAccount.getAccountType());
+		assertEquals("Personal",bankAccount.getAccountOwnerType());
+		assertEquals("Johns",bankAccount.getFirstName());
+		assertEquals("",bankAccount.getMiddleName());
+		assertEquals("Vincent",bankAccount.getLastName());
+		assertEquals("Mr",bankAccount.getSuffix());
+		assertTrue(bankAccount.isPrimaryBank());
+		assertEquals("Active",bankAccount.getStatus());
+		assertEquals("Phone",bankAccount.getAuthenticationMethod());
+		assertEquals("Open",bankAccount.getTransactionType());
+		assertEquals("Email",bankAccount.getCommunicationChannel());
+		assertEquals(123,bankAccount.getUserId());
+		assertEquals("Jo",bankAccount.getNickName());
+		assertEquals(LocalDateTime.of(LocalDate.now(), LocalTime.of(1,15)),bankAccount.getCreatedDate());
+		assertEquals(LocalDateTime.of(LocalDate.now(), LocalTime.of(1,15)),bankAccount.getLastModifiedDate());
+		assertEquals(2,bankAccount.getUpdateCount());
+	}
 
-//		BankAccount bankAccountnew = new BankAccount(accountNo,bankId,bankType,accountType,accountOwnerType,firstName,middleName,lastName,nickName,suffix,primaryBank,status,authenticationMethod,transactionType,communicationChannel,userId);
+	@Test
+	void applicationContextTest() {
+		BankingServiceApplication.main(new String[]{});
+	}
 
-		assertNotNull(bankAccount);
-		assertEquals(bankAccount.getAccountNo(),bankAccount1.getAccountNo());
-		assertEquals(bankAccount1.getBankId(),bankAccount.getBankId());
-		assertEquals(bankAccount1.getBankType(),bankAccount.getBankType());
+	@Test
+	void randomIdGeneratorTest(){
+		BankAccount account = new BankAccount(104,"Domestic","Checking","Personal","Johns","James","Jim","Jo","Mr",true,"Active","Phone","Open","Email",20240101);
+		String mockedUuid = account.generateRandomAccountNo();
+		BankAccount account1 = Mockito.spy(account);
+		Mockito.doReturn(mockedUuid).when(account1).generateRandomAccountNo();
+		account1.generaAccountNo();
+		assertEquals(mockedUuid, account1.getAccountNo());
 	}
 
 }

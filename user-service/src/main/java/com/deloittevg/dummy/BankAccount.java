@@ -31,6 +31,24 @@ public class BankAccount{
 	@Transient
 	private String ownerName;
 
+	public BankAccount(String accountNo, long bankId, String bankType, String accountType, String accountOwnerType, String firstName, String middleName, String lastName, String suffix, boolean primaryBank, String status, String authenticationMethod, String transactionType, String communicationChannel, long userId, String nickName) {
+		this.accountNo = accountNo;
+		this.bankId = bankId;
+		this.bankType = bankType;
+		this.accountType = accountType;
+		this.accountOwnerType = accountOwnerType;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.suffix = suffix;
+		this.primaryBank = primaryBank;
+		this.status = status;
+		this.authenticationMethod = authenticationMethod;
+		this.transactionType = transactionType;
+		this.communicationChannel = communicationChannel;
+		this.userId = userId;
+		this.nickName = nickName;
+	}
 
 	public int getUpdateCount() {
 		return updateCount;

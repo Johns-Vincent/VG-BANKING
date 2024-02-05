@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class EurekaServerRegistryApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void applicationContextTest() {
+		EurekaServerRegistryApplication.main(new String[]{});
 	}
-
 }

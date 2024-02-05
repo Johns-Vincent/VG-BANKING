@@ -1,0 +1,281 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > AuthorizationServerConfiguration</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.deloittevg.config</a>
+</div>
+
+<h1>Coverage Summary for Class: AuthorizationServerConfiguration (com.deloittevg.config)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AuthorizationServerConfiguration</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78.6%
+  </span>
+  <span class="absValue">
+    (22/28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AuthorizationServerConfiguration$$SpringCGLIB$$0</td>
+  </tr>
+  <tr>
+    <td class="name">AuthorizationServerConfiguration$$SpringCGLIB$$FastClass$$0</td>
+  </tr>
+  <tr>
+    <td class="name">AuthorizationServerConfiguration$$SpringCGLIB$$FastClass$$1</td>
+  </tr>
+  <tr>
+    <td class="name">AuthorizationServerConfiguration$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (24/30)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.deloittevg.config;
+&nbsp;
+&nbsp;import com.deloittevg.service.JpaUserDetailsService;
+&nbsp;import com.nimbusds.jose.jwk.JWKSet;
+&nbsp;import com.nimbusds.jose.jwk.PasswordLookup;
+&nbsp;import com.nimbusds.jose.jwk.source.JWKSource;
+&nbsp;import com.nimbusds.jose.proc.SecurityContext;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.context.annotation.Bean;
+&nbsp;import org.springframework.context.annotation.Configuration;
+&nbsp;import org.springframework.core.Ordered;
+&nbsp;import org.springframework.core.annotation.Order;
+&nbsp;import org.springframework.security.config.Customizer;
+&nbsp;import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+&nbsp;import org.springframework.security.core.Authentication;
+&nbsp;import org.springframework.security.core.GrantedAuthority;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.security.oauth2.core.AuthorizationGrantType;
+&nbsp;import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+&nbsp;import org.springframework.security.oauth2.jwt.JwtDecoder;
+&nbsp;import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
+&nbsp;import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
+&nbsp;import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+&nbsp;import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+&nbsp;import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+&nbsp;import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+&nbsp;import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+&nbsp;import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+&nbsp;import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+&nbsp;import org.springframework.security.web.SecurityFilterChain;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.security.KeyStore;
+&nbsp;import java.security.KeyStoreException;
+&nbsp;import java.security.NoSuchAlgorithmException;
+&nbsp;import java.security.cert.CertificateException;
+&nbsp;import java.time.Duration;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;@Configuration
+<b class="fc">&nbsp;public class AuthorizationServerConfiguration {</b>
+&nbsp;
+&nbsp;	private static final String ROLES_CLAIM = &quot;roles&quot;;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private JpaUserDetailsService jpaUserDetailsService;
+&nbsp;
+&nbsp;	@Value(&quot;${keyFile}&quot;)
+&nbsp;	private String keyFile;
+&nbsp;
+&nbsp;	@Value(&quot;${password}&quot;)
+&nbsp;	private String password;
+&nbsp;
+&nbsp;	@Value(&quot;${alias}&quot;)
+&nbsp;	private String alias;
+&nbsp;
+&nbsp;	@Value(&quot;${providerUrl}&quot;)
+&nbsp;	private String providerUrl;
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	private PasswordEncoder passwordEncoder;
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	@Order(Ordered.HIGHEST_PRECEDENCE)
+&nbsp;	SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
+<b class="fc">&nbsp;		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);</b>
+<b class="fc">&nbsp;		return http.userDetailsService(jpaUserDetailsService).formLogin(Customizer.withDefaults()).build();</b>
+&nbsp;		
+&nbsp;
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	JwtDecoder jwtDecoder(JWKSource&lt;SecurityContext&gt; jwkSource) {
+<b class="fc">&nbsp;		return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	JWKSource&lt;SecurityContext&gt; jwkSource()
+&nbsp;			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+<b class="fc">&nbsp;		JWKSet jwkSet = buildJWKSet();</b>
+<b class="fc">&nbsp;		return (jwkSelector, securityContext) -&gt; jwkSelector.select(jwkSet);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	private JWKSet buildJWKSet() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+<b class="fc">&nbsp;		KeyStore keyStore = KeyStore.getInstance(&quot;pkcs12&quot;);</b>
+<b class="fc">&nbsp;		try (InputStream fis = this.getClass().getClassLoader().getResourceAsStream(keyFile);) {</b>
+<b class="fc">&nbsp;			keyStore.load(fis, alias.toCharArray());</b>
+<b class="fc">&nbsp;			return JWKSet.load(keyStore, new PasswordLookup() {</b>
+&nbsp;				@Override
+&nbsp;				public char[] lookupPassword(String name) {
+<b class="fc">&nbsp;					return password.toCharArray();</b>
+&nbsp;				}
+&nbsp;			});
+<b class="fc">&nbsp;		}</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	AuthorizationServerSettings providerSettings() {
+<b class="fc">&nbsp;		return AuthorizationServerSettings.builder().issuer(providerUrl).build();</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	RegisteredClientRepository registeredClientRepository() {
+<b class="fc">&nbsp;		RegisteredClient registredClient = RegisteredClient.withId(&quot;user-service&quot;).clientId(&quot;userapp&quot;)</b>
+<b class="fc">&nbsp;				.clientSecret(passwordEncoder.encode(&quot;9999&quot;))</b>
+<b class="fc">&nbsp;				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)</b>
+<b class="fc">&nbsp;				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)</b>
+<b class="fc">&nbsp;				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)</b>
+<b class="fc">&nbsp;				.redirectUri(&quot;https://oidcdebugger.com/debug&quot;).scope(&quot;read&quot;).scope(&quot;write&quot;)</b>
+<b class="fc">&nbsp;				.tokenSettings(tokenSettings()).build();</b>
+<b class="fc">&nbsp;		return new InMemoryRegisteredClientRepository(registredClient);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	TokenSettings tokenSettings() {
+<b class="fc">&nbsp;		return TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(30l)).build();</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Bean
+&nbsp;	OAuth2TokenCustomizer&lt;JwtEncodingContext&gt; jwtCustomizer() {
+<b class="fc">&nbsp;		return context -&gt; {</b>
+<b class="nc">&nbsp;			if (context.getTokenType().equals(OAuth2TokenType.ACCESS_TOKEN)) {</b>
+<b class="nc">&nbsp;				Authentication principal = context.getPrincipal();</b>
+<b class="nc">&nbsp;				Set&lt;String&gt; authorities = principal.getAuthorities()</b>
+<b class="nc">&nbsp;						.stream().map(GrantedAuthority::getAuthority)</b>
+<b class="nc">&nbsp;						.collect(Collectors.toSet());</b>
+<b class="nc">&nbsp;				context.getClaims().claim(ROLES_CLAIM, authorities);</b>
+&nbsp;			}
+&nbsp;		};
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-05 16:42</div>
+</div>
+</body>
+</html>

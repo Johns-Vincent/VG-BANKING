@@ -94,26 +94,21 @@ public class UserServiceImpl implements UserService{
         bankingFeign.updateAccount(account1,account1.getAccountNo());
     }
 
-    public void updateNickName(String nickName, BankAccount bankAccount){
-        bankAccount.setNickName(nickName);
-    }
-
     @Override
     public String welcomeUser() {
         User user = getUserFromAuth();
-        if(user != null) {
-            return "Welcome " + user.getFirstName() + " " + user.getLastName();
-        }
-        else{
-            return "Error: User not found";
-        }
+//        if(user != null) {
+        return "Welcome " + user.getFirstName() + " " + user.getLastName();
+//        }
+//        else{
+//            return "Error: User not found";
+//        }
     }
 
     @Override
     public User getUserFromAuth() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return searchByEmail(authentication.getName());
-
     }
 
     @Override
@@ -144,9 +139,9 @@ public class UserServiceImpl implements UserService{
                 return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user", HttpStatus.NOT_ACCEPTABLE);
             }
             else {
-                bankingFeign.openAccount(bankAccount);
+                BankAccount account2 = bankingFeign.openAccount(bankAccount);
                 return new ResponseEntity<>("New Account opened Successfully\nAccount No: "
-                        + bankAccount.getAccountNo(), HttpStatus.OK);
+                        + account2.getAccountNo(), HttpStatus.OK);
             }
         }
     }

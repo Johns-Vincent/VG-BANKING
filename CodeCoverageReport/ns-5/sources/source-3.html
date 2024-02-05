@@ -1,0 +1,301 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > User</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.deloittevg.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: User (com.deloittevg.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">User</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (54/54)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">User$HibernateInstantiator$0AKA1dnG</td>
+  </tr>
+  <tr>
+    <td class="name">User$HibernateInstantiator$N1rTIXBN</td>
+  </tr>
+  <tr>
+    <td class="name">User$HibernateProxy$QFkluLMU</td>
+  </tr>
+  <tr>
+    <td class="name">User$HibernateProxy$VuWutAGA</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (54/54)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.deloittevg.entity;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonProperty;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import jakarta.validation.constraints.NotEmpty;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;user_details&quot;)
+&nbsp;public class User {
+&nbsp;    @TableGenerator(
+&nbsp;            name = &quot;user_id_gen&quot;,
+&nbsp;            table = &quot;id_generator&quot;,
+&nbsp;            pkColumnName = &quot;sequence_name&quot;,
+&nbsp;            valueColumnName = &quot;next_val&quot;,
+&nbsp;            pkColumnValue = &quot;user_id_seq&quot;,
+&nbsp;            allocationSize = 1,
+&nbsp;            initialValue = 20240100)
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(generator = &quot;user_id_gen&quot;,strategy= GenerationType.TABLE)
+&nbsp;    private long userId;
+&nbsp;    private String firstName;
+&nbsp;    private String middleName;
+&nbsp;    private String lastName;
+&nbsp;    private String primaryLocation;
+&nbsp;    private String currentAddress;
+&nbsp;    private String permAddress;
+&nbsp;    private String job;
+&nbsp;    private String jobLocation;
+&nbsp;    private String grossSalary;
+&nbsp;    @Column(unique = true,nullable = false)
+&nbsp;    private String email;
+&nbsp;
+&nbsp;    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+&nbsp;    @Column(nullable = false)
+&nbsp;    private String password;
+&nbsp;    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+&nbsp;    private String role;
+&nbsp;
+&nbsp;    public User() {
+<b class="fc">&nbsp;        super();</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public User(long userId, String firstName, String middleName, String lastName, String primaryLocation, String currentAddress, String permAddress, String job, String jobLocation, String grossSalary, String email, String password, String role) {</b>
+<b class="fc">&nbsp;        this.userId = userId;</b>
+<b class="fc">&nbsp;        this.firstName = firstName;</b>
+<b class="fc">&nbsp;        this.middleName = middleName;</b>
+<b class="fc">&nbsp;        this.lastName = lastName;</b>
+<b class="fc">&nbsp;        this.primaryLocation = primaryLocation;</b>
+<b class="fc">&nbsp;        this.currentAddress = currentAddress;</b>
+<b class="fc">&nbsp;        this.permAddress = permAddress;</b>
+<b class="fc">&nbsp;        this.job = job;</b>
+<b class="fc">&nbsp;        this.jobLocation = jobLocation;</b>
+<b class="fc">&nbsp;        this.grossSalary = grossSalary;</b>
+<b class="fc">&nbsp;        this.email = email;</b>
+<b class="fc">&nbsp;        this.password = password;</b>
+<b class="fc">&nbsp;        this.role = role;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public User(String firstName, String middleName, String lastName, String primaryLocation, String currentAddress, String permAddress, String job, String jobLocation, String grossSalary, String email, String password, String role) {</b>
+<b class="fc">&nbsp;        this.firstName = firstName;</b>
+<b class="fc">&nbsp;        this.middleName = middleName;</b>
+<b class="fc">&nbsp;        this.lastName = lastName;</b>
+<b class="fc">&nbsp;        this.primaryLocation = primaryLocation;</b>
+<b class="fc">&nbsp;        this.currentAddress = currentAddress;</b>
+<b class="fc">&nbsp;        this.permAddress = permAddress;</b>
+<b class="fc">&nbsp;        this.job = job;</b>
+<b class="fc">&nbsp;        this.jobLocation = jobLocation;</b>
+<b class="fc">&nbsp;        this.grossSalary = grossSalary;</b>
+<b class="fc">&nbsp;        this.email = email;</b>
+<b class="fc">&nbsp;        this.password = password;</b>
+<b class="fc">&nbsp;        this.role = role;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public long getUserId() {
+<b class="fc">&nbsp;        return userId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserId(long userId) {
+<b class="fc">&nbsp;        this.userId = userId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getFirstName() {
+<b class="fc">&nbsp;        return firstName;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setFirstName(String firstName) {
+<b class="fc">&nbsp;        this.firstName = firstName;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getMiddleName() {
+<b class="fc">&nbsp;        return middleName;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setMiddleName(String middleName) {
+<b class="fc">&nbsp;        this.middleName = middleName;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getLastName() {
+<b class="fc">&nbsp;        return lastName;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setLastName(String lastName) {
+<b class="fc">&nbsp;        this.lastName = lastName;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getPrimaryLocation() {
+<b class="fc">&nbsp;        return primaryLocation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPrimaryLocation(String primaryLocation) {
+<b class="fc">&nbsp;        this.primaryLocation = primaryLocation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getCurrentAddress() {
+<b class="fc">&nbsp;        return currentAddress;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCurrentAddress(String currentAddress) {
+<b class="fc">&nbsp;        this.currentAddress = currentAddress;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getPermAddress() {
+<b class="fc">&nbsp;        return permAddress;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPermAddress(String permAddress) {
+<b class="fc">&nbsp;        this.permAddress = permAddress;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getJob() {
+<b class="fc">&nbsp;        return job;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setJob(String job) {
+<b class="fc">&nbsp;        this.job = job;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getJobLocation() {
+<b class="fc">&nbsp;        return jobLocation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setJobLocation(String jobLocation) {
+<b class="fc">&nbsp;        this.jobLocation = jobLocation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getGrossSalary() {
+<b class="fc">&nbsp;        return grossSalary;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setGrossSalary(String grossSalary) {
+<b class="fc">&nbsp;        this.grossSalary = grossSalary;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getEmail() {
+<b class="fc">&nbsp;        return email;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEmail(String email) {
+<b class="fc">&nbsp;        this.email = email;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getPassword() {
+<b class="fc">&nbsp;        return password;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPassword(String password) {
+<b class="fc">&nbsp;        this.password = password;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getRole() {
+<b class="fc">&nbsp;        return role;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setRole(String role) {
+<b class="fc">&nbsp;        this.role = role;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-05 16:42</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > BankAccountServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.deloittevg.service</a>
+</div>
+
+<h1>Coverage Summary for Class: BankAccountServiceImpl (com.deloittevg.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BankAccountServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.deloittevg.service;
+&nbsp;
+&nbsp;import com.deloittevg.entity.BankAccount;
+&nbsp;import com.deloittevg.repository.BankAccountRepository;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class BankAccountServiceImpl implements BankAccountService{</b>
+&nbsp;
+&nbsp;	@Autowired
+&nbsp;	BankAccountRepository bankAccountRepository;
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	public BankAccount createAccount(BankAccount account) {
+<b class="fc">&nbsp;		return bankAccountRepository.save(account);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public BankAccount updateAccount(BankAccount account, String accountNo) {
+<b class="fc">&nbsp;		if(account != null){</b>
+<b class="fc">&nbsp;			account.setAccountNo(accountNo);</b>
+<b class="fc">&nbsp;			return bankAccountRepository.save(account);</b>
+&nbsp;		}
+&nbsp;		else{
+<b class="fc">&nbsp;			throw new IllegalArgumentException();</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public List&lt;BankAccount&gt; viewAllAccounts() {
+<b class="fc">&nbsp;		List&lt;BankAccount&gt; accounts = bankAccountRepository.findAll();</b>
+<b class="fc">&nbsp;		if (accounts.isEmpty()) {</b>
+<b class="fc">&nbsp;			return Collections.emptyList();</b>
+&nbsp;		}
+&nbsp;		else {
+<b class="fc">&nbsp;			return accounts;</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public BankAccount findByAccountNo(String accountNo) {
+<b class="fc">&nbsp;		return bankAccountRepository.findById(accountNo).orElse(null);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public void deleteAccount(String accountNo) {
+<b class="fc">&nbsp;		bankAccountRepository.deleteById(accountNo);</b>
+&nbsp;	}
+&nbsp;	@Override
+&nbsp;	public List&lt;BankAccount&gt; searchByUserId(long userId) {
+<b class="fc">&nbsp;		List&lt;BankAccount&gt; accounts = bankAccountRepository.findByUserId(userId);</b>
+<b class="fc">&nbsp;		if(accounts.isEmpty()) {</b>
+<b class="fc">&nbsp;			return Collections.emptyList();</b>
+&nbsp;		}
+&nbsp;		else{
+<b class="fc">&nbsp;			return accounts;</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-05 16:42</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > UserController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.deloittevg.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: UserController (com.deloittevg.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.deloittevg.controller;
+&nbsp;
+&nbsp;import com.deloittevg.dummy.BankAccount;
+&nbsp;import com.deloittevg.entity.User;
+&nbsp;import com.deloittevg.service.UserService;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import org.springframework.web.servlet.view.RedirectView;
+&nbsp;import java.util.List;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/user&quot;)
+<b class="fc">&nbsp;public class UserController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserService userService;
+&nbsp;
+&nbsp;    @GetMapping(&quot;/login&quot;)
+&nbsp;    public String userLogin(){
+<b class="fc">&nbsp;        return  userService.welcomeUser();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @PostMapping(&quot;/register&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt;registerUser(@RequestBody User user) {
+&nbsp;        try{
+<b class="fc">&nbsp;            User user1 = userService.registerUser(user);</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User registered\nUser ID: &quot;+ user1.getUserId(),HttpStatus.OK);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        catch(IllegalArgumentException ex){</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User not registered: &quot;+ex.getMessage(),HttpStatus.NOT_IMPLEMENTED);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;/{userId}/update&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt; updateUser(@RequestBody User user, @PathVariable long userId){
+<b class="fc">&nbsp;        if(userService.updateUser(user,userId) != null){</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User details of &quot;+user.getFirstName()+&quot; &quot; + user.getLastName()</b>
+&nbsp;            + &quot; has been updated.&quot;,HttpStatus.OK);
+&nbsp;        }
+&nbsp;        else{
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;No user found&quot;,HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/all&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;User&gt;&gt; viewAll(){
+<b class="fc">&nbsp;        if(userService.viewAll() != null) {</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(userService.viewAll(), HttpStatus.OK);</b>
+&nbsp;        }
+&nbsp;        else{
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    @GetMapping(&quot;/{userId}/details&quot;)
+&nbsp;    public ResponseEntity&lt;User&gt; viewUserDetails(@PathVariable long userId){
+<b class="fc">&nbsp;        User user1 =  userService.searchById(userId);</b>
+<b class="fc">&nbsp;        if(user1 == null){</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;        else{
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.OK).body(user1);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;/{userId}&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt; deleteAccount(@PathVariable long userId){
+<b class="fc">&nbsp;        if(userService.searchById(userId) != null){</b>
+<b class="fc">&nbsp;            userService.deleteUser(userId);</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User: &quot;+ userId +&quot; deleted&quot;,HttpStatus.OK);</b>
+&nbsp;        }
+&nbsp;        else{
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Account Not Found&quot;,HttpStatus.NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;{userId}/accounts&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;BankAccount&gt;&gt;viewAccountsByUser(@PathVariable long userId){
+<b class="fc">&nbsp;        List&lt;BankAccount&gt; accounts = userService.viewAccountsByUser(userId);</b>
+<b class="fc">&nbsp;        if(accounts.isEmpty()){</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.OK).body(accounts);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @PostMapping(&quot;{userId}/accounts/open-account&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt;openAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId){
+<b class="fc">&nbsp;        return userService.openAccount(userId,bankAccount);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;{userId}/accounts/{accountNo}&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt; deleteAccount(@PathVariable long userId, @PathVariable String accountNo){
+<b class="fc">&nbsp;        return userService.deleteAccount(userId,accountNo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;{userId}/accounts/{accountNo}/update-account&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt;updateAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId, @PathVariable String accountNo) {
+<b class="fc">&nbsp;        return userService.updateAccount(bankAccount,userId,accountNo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;{userId}/accounts/{accountNo}/update-nickname&quot;)
+&nbsp;    public ResponseEntity&lt;String&gt;updateNickName(@RequestBody String nickName,@PathVariable long userId, @PathVariable String accountNo){
+<b class="fc">&nbsp;        return userService.updateNickName(nickName,accountNo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-02-05 16:42</div>
+</div>
+</body>
+</html>

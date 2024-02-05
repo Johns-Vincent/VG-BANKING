@@ -20,7 +20,6 @@ public class SecurityUser implements UserDetails {
     public SecurityUser(User user) {
         this.user = user;
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> grandedAuthorities = new ArrayList<>();

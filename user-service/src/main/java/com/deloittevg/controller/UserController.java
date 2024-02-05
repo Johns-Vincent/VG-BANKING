@@ -1,18 +1,13 @@
 package com.deloittevg.controller;
 
-import com.deloittevg.client.BankingFeign;
 import com.deloittevg.dummy.BankAccount;
 import com.deloittevg.entity.User;
 import com.deloittevg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 @RestController
 @RequestMapping("/user")
@@ -26,11 +21,6 @@ public class UserController {
         return  userService.welcomeUser();
     }
 
-    @GetMapping("/details")
-    public RedirectView redirectToConsole() {
-        User user = userService.getUserFromAuth();
-        return new RedirectView("/user/" + user.getUserId() + "/details");
-    }
 
     @PostMapping("/register")
     public ResponseEntity<String>registerUser(@RequestBody User user) {
@@ -98,7 +88,7 @@ public class UserController {
 
 
     @PostMapping("{userId}/accounts/open-account")
-    public ResponseEntity<?>openAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId){
+    public ResponseEntity<String>openAccount(@RequestBody BankAccount bankAccount,@PathVariable long userId){
         return userService.openAccount(userId,bankAccount);
     }
 

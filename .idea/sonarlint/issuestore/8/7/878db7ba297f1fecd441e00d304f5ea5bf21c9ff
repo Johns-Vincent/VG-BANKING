@@ -1,13 +1,6 @@
 
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8©’ÌÖ1
-H
-java:S1452e"&Remove usage of generic wildcard type.(Ò¦ãùÿÿÿÿ8å’ÌÖ1
-a
-java:S1128"?Remove this unused import 'com.deloittevg.client.BankingFeign'.(Œâá”ùÿÿÿÿ8ÃÄâÌÖ1
-p
-java:S1128"TRemove this unused import 'org.springframework.dao.DataIntegrityViolationException'.(ÅÔº(8ÃÄâÌÖ1
-V
-java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ8ÄÄâÌÖ1
-W
-java:S1128":Remove this unused import 'java.time.temporal.ChronoUnit'.(Á…§8ÅÄâÌÖ1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8©’ÌÖ1
+k
+java:S1128
+"NRemove this unused import 'org.springframework.web.servlet.view.RedirectView'.(ñÎ²Ò8åÙ­Ã×1
