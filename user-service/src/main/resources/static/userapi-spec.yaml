@@ -41,6 +41,8 @@ paths:
           description: User not found
         "400":
           description: Invalid user Id
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -83,6 +85,8 @@ paths:
           description: Account not found
         "400":
           description: Invalid user Id/ Account No.
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -123,6 +127,8 @@ paths:
           description: Account not found
         "422":
           description: Owner not updated. Exceeded allowed updates this month
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -154,6 +160,8 @@ paths:
           description: New Bank Account opened successfully
         "409":
           description: "Account not opened: Exceeds allowed limits"
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -184,6 +192,8 @@ paths:
           description: New user successfully registered
         "422":
           description: "Incomplete/duplicate user data"
+        "500":
+          description: Server Error
   /user/{userId}/details:
     get:
       tags:
@@ -209,6 +219,8 @@ paths:
                 $ref: '#/components/schemas/UserWithId'
         "404":
           description: User not found
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -240,6 +252,8 @@ paths:
                   $ref: '#/components/schemas/GetBankAccount'
         "404":
           description: No accounts found
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -254,6 +268,8 @@ paths:
       responses:
         "200":
           description: Login Successful
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -276,6 +292,8 @@ paths:
                   $ref: '#/components/schemas/UserWithId'
         "404":
           description: No accounts found
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -301,6 +319,8 @@ paths:
           description: Account deleted successfully
         "404":
           description: User not found
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users
@@ -334,6 +354,8 @@ paths:
           description: Account not found
         "422":
           description: "Account can't be deleted: Wait for 30 days after creation" 
+        "500":
+          description: Server Error
       security:
         - user_auth:
             - write:users

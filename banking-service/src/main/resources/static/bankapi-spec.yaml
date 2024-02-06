@@ -38,6 +38,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetBankAccount'
+        "404":
+          description: Account not found
+        "500":
+          description: Server Error
   /bank/accounts/create:
     post:
       tags:
@@ -66,6 +70,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetBankAccount'
+        "500":
+          description: Server Error
   /bank/accounts/{accountNo}:
     get:
       tags:
@@ -88,6 +94,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetBankAccount'
+        "404":
+          description: Account not found
+        "500":
+          description: Server Error
   /bank/accounts/user/{userId}:
     get:
       tags:
@@ -113,6 +123,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/GetBankAccount'
+        "404":
+          description: Account not found
+        "500":
+          description: Server Error
   /bank/accounts:
     get:
       tags:
@@ -129,6 +143,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/GetBankAccount'
+        "404":
+          description: Account not found
+        "500":
+          description: Server Error
   /bank/accounts/{accountNo}/delete:
     delete:
       tags:
@@ -148,7 +166,9 @@ paths:
         "200":
           description: Account Deleted Successfully
         "404":
-          description: Account Not Found 
+          description: Account not found
+        "500":
+          description: Server Error
 components:
   schemas:
     BankAccount:

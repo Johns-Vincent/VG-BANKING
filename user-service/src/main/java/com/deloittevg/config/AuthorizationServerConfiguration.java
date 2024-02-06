@@ -123,7 +123,6 @@ public class AuthorizationServerConfiguration {
 				context.getClaims().claim(ROLES_CLAIM, authorities);
 			}
 		};
-
 	}
 
 }
