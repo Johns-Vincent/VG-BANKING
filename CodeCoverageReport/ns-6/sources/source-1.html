@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (16/16)
+    (17/17)
   </span>
 </td>
 </tr>
@@ -99,12 +99,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;	@Override
 &nbsp;	public BankAccount updateAccount(BankAccount account, String accountNo) {
-<b class="fc">&nbsp;		if(account != null){</b>
+<b class="fc">&nbsp;		BankAccount account1 = findByAccountNo(accountNo);</b>
+<b class="fc">&nbsp;		if(account1 != null &amp;&amp; account != null){</b>
 <b class="fc">&nbsp;			account.setAccountNo(accountNo);</b>
 <b class="fc">&nbsp;			return bankAccountRepository.save(account);</b>
 &nbsp;		}
 &nbsp;		else{
-<b class="fc">&nbsp;			throw new IllegalArgumentException();</b>
+<b class="fc">&nbsp;			return null;</b>
 &nbsp;		}
 &nbsp;	}
 &nbsp;
@@ -162,7 +163,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-02-05 16:42</div>
+    <div style="float:right;">generated on 2024-02-06 16:42</div>
 </div>
 </body>
 </html>

@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  version: 1.0.11
+  title: Bank Service
+  description: |-
+    This a Bank Account service web application interface which helps in utilising the various banking functionalities by valid users.
+servers:
+- url: http://localhost:8090
+tags:
+  - name: bank
+    description: Access the bank account functionalities
+paths:
+  /bank/accounts/{accountNo}/update:
+    put:
+      tags:
+      - bank
+      summary: To update Bank Account details
+      description: Update an existing Bank Account by Account Number
+      operationId: updateBankAccount
+      parameters:
+      - name: accountNo
+        in: path
+        description: Provide the Account Number of the Bank Account to be updated
+        required: true
+        schema:
+          type: string
+          example: "d64f7bc8d6be44b4"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccount'
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAccount'
+  /bank/accounts/create:
+    post:
+      tags:
+      - bank
+      summary: To create a new Bank Account
+      description: User can create a new Bank Account
+      operationId: createBankAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/BankAccount'
+              - type: object
+                properties:
+                  password:
+                    type: string
+                    description: Password
+                    writeOnly: true
+                    example: pass123
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAccount'
+  /bank/accounts/{accountNo}:
+    get:
+      tags:
+      - bank
+      summary: View details of a Bank Account
+      description: View Bank Account details by Account Number
+      operationId: viewBankAccountDetailsByAccountNo
+      parameters:
+      - name: accountNo
+        in: path
+        description: Provide the Account Numbe of the Bank Account to view details
+        required: true
+        schema:
+          type: string
+          example: "d64f7bc8d6be44b4"
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankAccount'
+  /bank/accounts/user/{userId}:
+    get:
+      tags:
+      - bank
+      summary: View details of Bank Accounts of a User
+      description: View all Bank Account details of a User by User Id
+      operationId: viewAccountsbyUserId
+      parameters:
+      - name: userId
+        in: path
+        description: Provide the User Id of User to view details of all Bank Accounts of that user
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 20240101
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetBankAccount'
+  /bank/accounts:
+    get:
+      tags:
+      - bank
+      operationId: viewAll
+      summary: View all Bank Accounts
+      description: View the deatils of all Bank Accounts of all users
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetBankAccount'
+  /bank/accounts/{accountNo}/delete:
+    delete:
+      tags:
+      - bank
+      summary: Delete a Bank Account
+      description: Delete the Bank Account by Account Number
+      operationId: deleteAccount
+      parameters:
+      - name: accountNo
+        in: path
+        description: User Id of user to be deleted
+        required: true
+        schema:
+          type: string
+          example: "d64f7bc8d6be44b4"
+      responses:
+        "200":
+          description: Account Deleted Successfully
+        "404":
+          description: Account Not Found 
+components:
+  schemas:
+    BankAccount:
+      type: object
+      properties:
+        bankId:
+          type: integer
+          description: Id of the corresponding Bank
+          format: int64
+          example: 571946715
+        bankType:
+          type: string
+          description: Type of Bank - Domestic/Foreign
+          example: Domestic
+        accountType:
+          type: string
+          description : "Type of Account - Savings/Checking. Only 2 cheking accounts permitted per user" 
+          example: Savings
+        accountOwnerType:
+          type: string
+          description: Type of account owner - Person/Organization
+          example: Person
+        firstName:
+          type: string
+          description: First Name
+          example: James
+        middleName:
+          type: string
+          description: Middle Name
+          example: Miller
+        lastName:
+          type: string
+          description: Last Name
+          example: May
+        suffix:
+          type: string
+          description: Preferred salutation
+          example: Mr
+        primaryBank:
+          type: boolean
+          description: Whether this account is in the users' primary bank
+          example: true
+        status:
+          type: string
+          description: Status of the account - Active/Draft
+          example: Active
+        authenticationMethod:
+          type: string
+          description: Preferred authentication method
+          example: Email
+        transactionType:
+          type: string
+          description: Type of transaction
+          example: Open account
+        communicationChannel:
+          type: string
+          description: Preferred mode of communication
+          example: Phone
+        nickName:
+          type: string
+          description: Can update any number of times
+          example: Joe
+    GetBankAccount:
+      allOf:
+        - type: object
+          properties:
+            accountNo:
+              type: string
+              description: Account Number
+              example: 1f729f7898944113
+            ownerName:
+              type: string
+              description: Owner Name
+              example: Mr James Miller May
+            updateCount:
+              type: integer
+              format: int32
+              example: 2
+              description: Number of ower details update this month
+            createdDate:
+              type: string
+              format: date-time
+              description: Account created date (autogenerated)
+            lastModifiedDate:
+              type: string
+              format: date-time
+              description: Last update date (autogenerated)
+        - $ref: '#/components/schemas/BankAccount'

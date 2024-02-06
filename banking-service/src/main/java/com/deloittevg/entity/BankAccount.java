@@ -104,7 +104,7 @@ public class BankAccount {
 	}
 
 	@PrePersist
-	public void generaAccountNo() {
+	public void generateAccountNo() {
 	        // Generate a 16-character alphanumeric user ID
 		this.accountNo = generateRandomAccountNo();
 	}

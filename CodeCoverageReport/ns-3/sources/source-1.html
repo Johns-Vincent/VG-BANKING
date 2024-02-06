@@ -80,6 +80,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.deloittevg.entity.BankAccount;
 &nbsp;import com.deloittevg.service.BankAccountService;
 &nbsp;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
 &nbsp;import org.springframework.web.bind.annotation.*;
 &nbsp;
 &nbsp;import java.time.LocalDateTime;
@@ -118,13 +120,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;
 &nbsp;	@DeleteMapping(&quot;/accounts/{accountNo}&quot;)
-&nbsp;	public String deleteAccount(@PathVariable String accountNo){
+&nbsp;	public ResponseEntity&lt;String&gt; deleteAccount(@PathVariable String accountNo){
 <b class="fc">&nbsp;		if(bankAccountService.findByAccountNo(accountNo)!= null){</b>
 <b class="fc">&nbsp;			bankAccountService.deleteAccount(accountNo);</b>
-<b class="fc">&nbsp;			return &quot;Account: &quot;+ accountNo +&quot; deleted&quot;;</b>
+<b class="fc">&nbsp;			return ResponseEntity.status(HttpStatus.OK).body(&quot;Account deleted&quot;);</b>
 &nbsp;		}
 &nbsp;		else {
-<b class="fc">&nbsp;			return &quot;No account found&quot;;</b>
+<b class="fc">&nbsp;			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Account not found&quot;);</b>
 &nbsp;		}
 &nbsp;	}
 &nbsp;	
@@ -157,7 +159,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-02-05 16:42</div>
+    <div style="float:right;">generated on 2024-02-06 16:42</div>
 </div>
 </body>
 </html>

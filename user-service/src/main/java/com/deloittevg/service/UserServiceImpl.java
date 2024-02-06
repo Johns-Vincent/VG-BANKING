@@ -4,9 +4,7 @@ import com.deloittevg.client.BankingFeign;
 import com.deloittevg.dummy.BankAccount;
 import com.deloittevg.entity.User;
 import com.deloittevg.repository.UserRepository;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -97,12 +95,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public String welcomeUser() {
         User user = getUserFromAuth();
-//        if(user != null) {
         return "Welcome " + user.getFirstName() + " " + user.getLastName();
-//        }
-//        else{
-//            return "Error: User not found";
-//        }
     }
 
     @Override

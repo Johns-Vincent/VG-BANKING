@@ -22,12 +22,13 @@ public class BankAccountServiceImpl implements BankAccountService{
 
 	@Override
 	public BankAccount updateAccount(BankAccount account, String accountNo) {
-		if(account != null){
+		BankAccount account1 = findByAccountNo(accountNo);
+		if(account1 != null && account != null){
 			account.setAccountNo(accountNo);
 			return bankAccountRepository.save(account);
 		}
 		else{
-			throw new IllegalArgumentException();
+			return null;
 		}
 	}
 

@@ -98,7 +98,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        return  userService.welcomeUser();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;
 &nbsp;    @PostMapping(&quot;/register&quot;)
 &nbsp;    public ResponseEntity&lt;String&gt;registerUser(@RequestBody User user) {
 &nbsp;        try{
@@ -106,7 +105,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User registered\nUser ID: &quot;+ user1.getUserId(),HttpStatus.OK);</b>
 &nbsp;        }
 <b class="fc">&nbsp;        catch(IllegalArgumentException ex){</b>
-<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User not registered: &quot;+ex.getMessage(),HttpStatus.NOT_IMPLEMENTED);</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User not registered: &quot;+ex.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
@@ -127,7 +126,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(userService.viewAll(), HttpStatus.OK);</b>
 &nbsp;        }
 &nbsp;        else{
-<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;    @GetMapping(&quot;/{userId}/details&quot;)
@@ -183,7 +182,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    public ResponseEntity&lt;String&gt;updateNickName(@RequestBody String nickName,@PathVariable long userId, @PathVariable String accountNo){
 <b class="fc">&nbsp;        return userService.updateNickName(nickName,accountNo);</b>
 &nbsp;    }
-&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -208,7 +206,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-02-05 16:42</div>
+    <div style="float:right;">generated on 2024-02-06 16:42</div>
 </div>
 </body>
 </html>

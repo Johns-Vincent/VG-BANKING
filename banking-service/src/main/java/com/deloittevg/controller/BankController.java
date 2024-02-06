@@ -3,6 +3,8 @@ package com.deloittevg.controller;
 import com.deloittevg.entity.BankAccount;
 import com.deloittevg.service.BankAccountService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -41,13 +43,13 @@ public class BankController {
 
 
 	@DeleteMapping("/accounts/{accountNo}")
-	public String deleteAccount(@PathVariable String accountNo){
+	public ResponseEntity<String> deleteAccount(@PathVariable String accountNo){
 		if(bankAccountService.findByAccountNo(accountNo)!= null){
 			bankAccountService.deleteAccount(accountNo);
-			return "Account: "+ accountNo +" deleted";
+			return ResponseEntity.status(HttpStatus.OK).body("Account deleted");
 		}
 		else {
-			return "No account found";
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
 		}
 	}
 	

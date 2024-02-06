@@ -210,10 +210,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                }
 <b class="fc">&nbsp;            }</b>
 <b class="fc">&nbsp;            if (accounts.size() &gt;= 3) {</b>
-<b class="fc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;FAILED TO OPEN ACCOUNT\nOnly 3 accounts permitted per user&quot;, HttpStatus.NOT_ACCEPTABLE);</b>
+<b class="fc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;FAILED TO OPEN ACCOUNT\nOnly 3 accounts permitted per user&quot;, HttpStatus.CONFLICT);</b>
 &nbsp;            }
 <b class="fc">&nbsp;            else if (bankAccount.getAccountType().equalsIgnoreCase(&quot;checking&quot;) &amp;&amp; checkingCount &gt;= 2) {</b>
-<b class="fc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user&quot;, HttpStatus.NOT_ACCEPTABLE);</b>
+<b class="fc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user&quot;, HttpStatus.CONFLICT);</b>
 &nbsp;            }
 &nbsp;            else {
 <b class="fc">&nbsp;                BankAccount account2 = bankingFeign.openAccount(bankAccount);</b>
@@ -232,7 +232,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        else{
 <b class="fc">&nbsp;            long daysBetween = ChronoUnit.DAYS.between(account.getCreatedDate(),LocalDateTime.now());</b>
 <b class="fc">&nbsp;            if(daysBetween &lt;= 30){</b>
-<b class="fc">&nbsp;                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)</b>
+<b class="fc">&nbsp;                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)</b>
 <b class="fc">&nbsp;                        .body(&quot;ACCOUNT CREATED WITHIN 30 DAYS CANNOT BE DELETED\n&quot;+</b>
 &nbsp;                                &quot;Days remaining to delete this account: &quot;+ (30-daysBetween));
 &nbsp;            }
@@ -259,7 +259,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        else {
 <b class="fc">&nbsp;            LocalDateTime lastUpdatedTime = account.getLastModifiedDate();</b>
 <b class="fc">&nbsp;            if (lastUpdatedTime != null &amp;&amp; isSameMonth(lastUpdatedTime,LocalDateTime.now()) &amp;&amp; account.getUpdateCount() &gt;= maxUpdatesPerMonth) {</b>
-<b class="fc">&nbsp;                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(&quot;Your name can only be updated twice a month, please try next month&quot;);</b>
+<b class="fc">&nbsp;                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(&quot;Your name can only be updated twice a month, please try next month&quot;);</b>
 &nbsp;            }
 <b class="fc">&nbsp;            else if (lastUpdatedTime != null &amp;&amp; !isSameMonth(lastUpdatedTime,LocalDateTime.now())) {</b>
 <b class="fc">&nbsp;                account.setUpdateCount(1);</b>
@@ -311,7 +311,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-02-05 16:42</div>
+    <div style="float:right;">generated on 2024-02-06 16:42</div>
 </div>
 </body>
 </html>

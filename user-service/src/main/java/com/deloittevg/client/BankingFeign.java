@@ -2,7 +2,6 @@ package com.deloittevg.client;
 
 import com.deloittevg.dummy.BankAccount;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public interface BankingFeign {
     public BankAccount openAccount(BankAccount bankAccount);
 
     @DeleteMapping("/bank/accounts/{accountNo}")
-    public String deleteAccount(@PathVariable String accountNo);
+    public void deleteAccount(@PathVariable String accountNo);
 
     @GetMapping("/bank/accounts/{accountNo}")
     public BankAccount searchByAccountNo(@PathVariable String accountNo);

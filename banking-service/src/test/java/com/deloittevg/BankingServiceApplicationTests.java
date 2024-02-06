@@ -67,14 +67,14 @@ class BankingServiceApplicationTests {
 	void updateAccountTest() {
 		BankAccount bankAccount = this.bankAccount1;
 		when(bankAccountRepository.save(bankAccount)).thenReturn(bankAccount);
+		when(bankAccountRepository.findById(bankAccount.getAccountNo())).thenReturn(Optional.of(bankAccount));
 		assertEquals(bankAccount,bankAccountService.updateAccount(bankAccount,bankAccount.getAccountNo()));
 		verify(bankAccountRepository).save(bankAccount);
 	}
 
 	@Test
 	void updateAccountTest_ifAccountIsNull() {
-		BankAccount bankAccount = null;
-		assertThrows(IllegalArgumentException.class,()->bankAccountService.updateAccount(bankAccount,null));
+		assertNull(bankAccountService.updateAccount(null,null));
 	}
 
 	@Test
@@ -137,6 +137,7 @@ class BankingServiceApplicationTests {
 	void updateAccount_ControllerTest(){
 		BankAccount entity = this.bankAccount1;
 		entity.setUserId(20240102);
+		when(bankAccountRepository.findById(entity.getAccountNo())).thenReturn(Optional.of(entity));
 		when(bankAccountService.updateAccount(entity,entity.getAccountNo())).thenReturn(entity);
 		BankAccount updatedAccount = bankController.updateAccount(entity,entity.getAccountNo());
 		assertNotNull(updatedAccount);
@@ -171,16 +172,16 @@ class BankingServiceApplicationTests {
 	void deleteAccount_ControllerTest(){
 		BankAccount bankAccount = this.bankAccount1;
 		when(bankAccountRepository.findById(bankAccount.getAccountNo())).thenReturn(Optional.of(bankAccount));
-		assertEquals("Account: "+ bankAccount.getAccountNo() +" deleted"
-				,bankController.deleteAccount(bankAccount.getAccountNo()));
+		assertEquals("Account deleted"
+				,bankController.deleteAccount(bankAccount.getAccountNo()).getBody());
 	}
 
 	@Test
 	void deleteAccount_ControllerTest_AccountNull(){
 		BankAccount bankAccount = this.bankAccount1;
 		when(bankAccountRepository.findById(bankAccount.getAccountNo())).thenReturn(Optional.of(bankAccount));
-		assertEquals("No account found"
-				,bankController.deleteAccount("NonExistentAccountNo"));
+		assertEquals("Account not found"
+				,bankController.deleteAccount("NonExistentAccountNo").getBody());
 	}
 
 
@@ -239,7 +240,7 @@ class BankingServiceApplicationTests {
 		String mockedUuid = account.generateRandomAccountNo();
 		BankAccount account1 = Mockito.spy(account);
 		Mockito.doReturn(mockedUuid).when(account1).generateRandomAccountNo();
-		account1.generaAccountNo();
+		account1.generateAccountNo();
 		assertEquals(mockedUuid, account1.getAccountNo());
 	}
 

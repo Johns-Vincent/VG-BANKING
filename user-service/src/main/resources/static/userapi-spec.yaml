@@ -40,7 +40,7 @@ paths:
         "404":
           description: User not found
         "400":
-          description: INvalid user Id
+          description: Invalid user Id
       security:
         - user_auth:
             - write:users

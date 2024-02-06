@@ -1,11 +1,5 @@
 
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8’ý¡¼×1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8’ý¡¼×1
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8“ý¡¼×1
-X	java:S125d"<This block of commented-out lines of code should be removed.(¦ÖÕû8¡´¢¼×1
-]	java:S125f"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ8Ÿý¡¼×1
-Y
-java:S1128"<Remove this unused import 'jakarta.ws.rs.NotFoundException'.(ÈÂ¹·8’Åì×1
-^
-java:S1128	"ARemove this unused import 'org.springframework.cglib.core.Local'.(ÁÒû8’Åì×1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8“ý¡¼×1

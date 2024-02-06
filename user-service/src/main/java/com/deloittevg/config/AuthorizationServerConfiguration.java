@@ -2,10 +2,8 @@ package com.deloittevg.config;
 
 import com.deloittevg.service.JpaUserDetailsService;
 import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.PasswordLookup;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,9 +43,6 @@ public class AuthorizationServerConfiguration {
 
 	private static final String ROLES_CLAIM = "roles";
 
-	@Autowired
-	private JpaUserDetailsService jpaUserDetailsService;
-
 	@Value("${keyFile}")
 	private String keyFile;
 
@@ -60,12 +55,9 @@ public class AuthorizationServerConfiguration {
 	@Value("${providerUrl}")
 	private String providerUrl;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
 	@Bean
 	@Order(Ordered.HIGHEST_PRECEDENCE)
-	SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http, JpaUserDetailsService jpaUserDetailsService) throws Exception {
 		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 		return http.userDetailsService(jpaUserDetailsService).formLogin(Customizer.withDefaults()).build();
 		
@@ -91,12 +83,7 @@ public class AuthorizationServerConfiguration {
 		KeyStore keyStore = KeyStore.getInstance("pkcs12");
 		try (InputStream fis = this.getClass().getClassLoader().getResourceAsStream(keyFile);) {
 			keyStore.load(fis, alias.toCharArray());
-			return JWKSet.load(keyStore, new PasswordLookup() {
-				@Override
-				public char[] lookupPassword(String name) {
-					return password.toCharArray();
-				}
-			});
+			return JWKSet.load(keyStore, name -> password.toCharArray());
 		}
 
 	}
@@ -108,7 +95,7 @@ public class AuthorizationServerConfiguration {
 	}
 
 	@Bean
-	RegisteredClientRepository registeredClientRepository() {
+	RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
 		RegisteredClient registredClient = RegisteredClient.withId("user-service").clientId("userapp")
 				.clientSecret(passwordEncoder.encode("9999"))
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)

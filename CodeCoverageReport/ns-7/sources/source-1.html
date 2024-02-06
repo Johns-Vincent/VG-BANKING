@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > BankAccountRepository</title>
+  <title>Coverage Report > UserRepository</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.deloittevg.repository</a>
 </div>
 
-<h1>Coverage Summary for Class: BankAccountRepository (com.deloittevg.repository)</h1>
+<h1>Coverage Summary for Class: UserRepository (com.deloittevg.repository)</h1>
 
 <table class="coverageStats">
 
@@ -30,13 +30,13 @@ Current scope:     <a href="../../index.html">all classes</a>
   <th class="name">Class</th>
 </tr>
   <tr>
-    <td class="name">BankAccountRepository$MockitoMock$GCpbuGWL</td>
+    <td class="name">UserRepository$MockitoMock$EAY3vEgO</td>
   </tr>
   <tr>
-    <td class="name">BankAccountRepository$MockitoMock$GCpbuGWL$auxiliary$tmNdbrGE</td>
+    <td class="name">UserRepository$MockitoMock$EAY3vEgO$auxiliary$brGoAcZX</td>
   </tr>
   <tr>
-    <td class="name">BankAccountRepository$MockitoMock$GCpbuGWL$auxiliary$xm4GIxuA</td>
+    <td class="name">UserRepository$MockitoMock$EAY3vEgO$auxiliary$SWHrHCJf</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -50,15 +50,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.deloittevg.repository;
 &nbsp;
-&nbsp;import com.deloittevg.entity.BankAccount;
+&nbsp;import com.deloittevg.dummy.BankAccount;
+&nbsp;import com.deloittevg.entity.User;
 &nbsp;import org.springframework.data.jpa.repository.JpaRepository;
 &nbsp;import org.springframework.stereotype.Repository;
 &nbsp;
 &nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
 &nbsp;
 &nbsp;@Repository
-&nbsp;public interface BankAccountRepository extends JpaRepository&lt;BankAccount, String&gt;{
-&nbsp;    List&lt;BankAccount&gt; findByUserId(long userId);
+&nbsp;public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+&nbsp;
+&nbsp;    Optional&lt;User&gt; findByEmail(String email);
+&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -83,7 +87,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-02-05 16:42</div>
+    <div style="float:right;">generated on 2024-02-06 16:42</div>
 </div>
 </body>
 </html>

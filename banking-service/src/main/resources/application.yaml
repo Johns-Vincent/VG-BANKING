@@ -18,3 +18,9 @@ eureka:
   client:
     fetch-registry: true
     register-with-eureka: true
+springdoc:
+  api-docs:
+    path: /bankapi-doc
+  swagger-ui:
+    url: /bankapi-spec.yaml
+    path: /bank-ui
