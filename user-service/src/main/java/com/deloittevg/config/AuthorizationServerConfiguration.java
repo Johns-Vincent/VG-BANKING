@@ -121,7 +121,7 @@ public class AuthorizationServerConfiguration {
 
 	@Bean
 	TokenSettings tokenSettings() {
-		return TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(30l)).build();
+		return TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(200l)).build();
 
 	}
 

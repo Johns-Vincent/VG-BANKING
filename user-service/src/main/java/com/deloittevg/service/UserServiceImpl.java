@@ -133,10 +133,10 @@ public class UserServiceImpl implements UserService{
                 }
             }
             if (accounts.size() >= 3) {
-                return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 3 accounts permitted per user", HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 3 accounts permitted per user", HttpStatus.CONFLICT);
             }
             else if (bankAccount.getAccountType().equalsIgnoreCase("checking") && checkingCount >= 2) {
-                return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user", HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>("FAILED TO OPEN ACCOUNT\nOnly 2 Checking accounts permitted per user", HttpStatus.CONFLICT);
             }
             else {
                 BankAccount account2 = bankingFeign.openAccount(bankAccount);
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService{
         else{
             long daysBetween = ChronoUnit.DAYS.between(account.getCreatedDate(),LocalDateTime.now());
             if(daysBetween <= 30){
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         .body("ACCOUNT CREATED WITHIN 30 DAYS CANNOT BE DELETED\n"+
                                 "Days remaining to delete this account: "+ (30-daysBetween));
             }
@@ -182,7 +182,7 @@ public class UserServiceImpl implements UserService{
         else {
             LocalDateTime lastUpdatedTime = account.getLastModifiedDate();
             if (lastUpdatedTime != null && isSameMonth(lastUpdatedTime,LocalDateTime.now()) && account.getUpdateCount() >= maxUpdatesPerMonth) {
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Your name can only be updated twice a month, please try next month");
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Your name can only be updated twice a month, please try next month");
             }
             else if (lastUpdatedTime != null && !isSameMonth(lastUpdatedTime,LocalDateTime.now())) {
                 account.setUpdateCount(1);

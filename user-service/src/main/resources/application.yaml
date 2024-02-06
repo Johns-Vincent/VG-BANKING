@@ -43,4 +43,5 @@ springdoc:
   api-docs:
     path: /userapi-doc
   swagger-ui:
+    url: /userapi-spec.yaml
     path: /user-ui

@@ -21,7 +21,6 @@ public class UserController {
         return  userService.welcomeUser();
     }
 
-
     @PostMapping("/register")
     public ResponseEntity<String>registerUser(@RequestBody User user) {
         try{
@@ -29,7 +28,7 @@ public class UserController {
             return new ResponseEntity<>("User registered\nUser ID: "+ user1.getUserId(),HttpStatus.OK);
         }
         catch(IllegalArgumentException ex){
-            return new ResponseEntity<>("User not registered: "+ex.getMessage(),HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>("User not registered: "+ex.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -50,7 +49,7 @@ public class UserController {
             return new ResponseEntity<>(userService.viewAll(), HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
     @GetMapping("/{userId}/details")
@@ -106,5 +105,4 @@ public class UserController {
     public ResponseEntity<String>updateNickName(@RequestBody String nickName,@PathVariable long userId, @PathVariable String accountNo){
         return userService.updateNickName(nickName,accountNo);
     }
-
 }

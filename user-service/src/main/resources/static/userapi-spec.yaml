@@ -1,0 +1,496 @@
+openapi: 3.0.3
+info:
+  version: 1.0.11
+  title: Banking User Service
+  description: |-
+    This a Banking User service web application interface which helps in utilising the various banking functionalities by authenticating in.
+servers:
+- url: http://localhost:8089
+tags:
+  - name: user
+    description: Access the user console
+  - name: bank
+    description: Access all banking functionalities
+paths:
+  /user/{userId}/update:
+    put:
+      tags:
+      - user
+      summary: Update user details
+      description: Update an existing user's details by user Id
+      operationId: updateUser
+      parameters:
+      - name: userId
+        in: path
+        description: Provide the User Id of user to be updated
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 20240101
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: User details successfully updated
+        "404":
+          description: User not found
+        "400":
+          description: INvalid user Id
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/{userId}/accounts/{accountNo}/update-nickname:
+    put:
+      tags:
+      - bank
+      summary: Update account nickname
+      description: Can be updated any number of times
+      operationId: updateNickName
+      parameters:
+      - name: userId
+        in: path
+        description: "User Id of user whose account nickname is to be updated."
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 20240101
+      - name: accountNo
+        in: path
+        description: "Account No of the account to be updated."
+        required: true
+        schema:
+          type: string
+          example: 1f729f7898944113
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              description: new nickname
+              example: willy
+        required: true
+      responses:
+        "200":
+          description: Nickname updated successfully
+        "404":
+          description: Account not found
+        "400":
+          description: Invalid user Id/ Account No.
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/{userId}/accounts/{accountNo}/update-account:
+    put:
+      tags:
+      - bank
+      summary: Update account owner details
+      description: Can only be updated twice in a month
+      operationId: updateAccount
+      parameters:
+      - name: userId
+        in: path
+        description: User id of account to be updated
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 20240101
+      - name: accountNo
+        in: path
+        description: Account No. of account to be updated
+        required: true
+        schema:
+          type: string
+          example: 1f729f7898944113
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerDetails'
+        required: true
+      responses:
+        "200":
+          description: Owner details updated
+        "404":
+          description: Account not found
+        "422":
+          description: Owner not updated. Exceeded allowed updates this month
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/{userId}/accounts/open-account:
+    post:
+      tags:
+      - bank
+      summary: Open a new account by user
+      description: "A user can only open 3 accounts in total and a maximum of 2 Checking accounts"
+      operationId: openAccount
+      parameters:
+      - name: userId
+        in: path
+        description: User Id
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 20240101
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccount'
+        required: true
+      responses:
+        "200":
+          description: New Bank Account opened successfully
+        "409":
+          description: "Account not opened: Exceeds allowed limits"
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/register:
+    post:
+      tags:
+      - user
+      summary: To register a new user
+      description: Anyone is permitted to register
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/User'
+              - type: object
+                properties:
+                  password:
+                    type: string
+                    description: Password
+                    writeOnly: true
+                    example: pass123
+        required: true
+      responses:
+        "200":
+          description: New user successfully registered
+        "422":
+          description: "Incomplete/duplicate user data"
+  /user/{userId}/details:
+    get:
+      tags:
+      - user
+      summary: Get user details
+      description: Get user details by User Id
+      operationId: viewUserDetails
+      parameters:
+      - name: userId
+        in: path
+        description: Provide User id of user whose details are needed
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 20240101
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithId'
+        "404":
+          description: User not found
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/{userId}/accounts:
+    get:
+      tags:
+      - bank
+      summary: View all accounts by a user
+      description: Returns the account details of a user by User Id
+      operationId: viewAccountsByUser
+      parameters:
+      - name: userId
+        in: path
+        description: User Id of user whose accounts are to be fetched
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 20240101
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetBankAccount'
+        "404":
+          description: No accounts found
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/login:
+    get:
+      tags:
+      - user
+      summary: Login page
+      description: User can login using username and password, or using github as Oauth2
+      operationId: userLogin
+      responses:
+        "200":
+          description: Login Successful
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/all:
+    get:
+      tags:
+      - user
+      operationId: viewAll
+      summary: View all users' details
+      description: Restricted to those who have ADMIN role
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWithId'
+        "404":
+          description: No accounts found
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/{userId}:
+    delete:
+      tags:
+      - user
+      summary: Delete a user
+      description: Delete the user with User Id
+      operationId: deleteUser
+      parameters:
+      - name: userId
+        in: path
+        description: User Id of user to be deleted
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 20240101
+      responses:
+        "200":
+          description: Account deleted successfully
+        "404":
+          description: User not found
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+  /user/{userId}/accounts/{accountNo}:
+    delete:
+      tags:
+      - bank
+      summary: Delete a bank account
+      description: "An account can only be deleted after 30 days of creation"
+      operationId: deleteAccount
+      parameters:
+      - name: userId
+        in: path
+        description: User Id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: accountNo
+        in: path
+        description: Account Number of account to be deleted
+        required: true
+        schema:
+          type: string
+          example: 1f729f7898944113
+      responses:
+        "200":
+          description: Account deleted successfully
+        "404":
+          description: Account not found
+        "422":
+          description: "Account can't be deleted: Wait for 30 days after creation" 
+      security:
+        - user_auth:
+            - write:users
+            - read:users
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First Name
+          example: James
+        middleName:
+          type: string
+          description: Middle Name
+          example: Miller
+        lastName:
+          type: string
+          description: Last Name
+          example: May
+        primaryLocation:
+          type: string
+          description: Primary Location
+          example: Benguluru
+        currentAddress:
+          type: string
+          description: Current Address
+          example: Benguluru
+        permAddress:
+          type: string
+          description: Permanent Address
+          example: Kannur
+        job:
+          type: string
+          description: Job Title
+          example: Analyst
+        jobLocation:
+          type: string
+          description: Job Location
+          example: Bellandur
+        grossSalary:
+          type: string
+          description: Gross Salary
+          example: "40000"
+        email:
+          type: string
+          description: User Email
+          example: jmay@email.com
+    UserWithId:
+      allOf:
+        - type: object
+          properties:
+            userId:
+              type: integer
+              description: User Id
+              format: int64
+              example: 20240101
+        - $ref: '#/components/schemas/User'
+    BankAccount:
+      type: object
+      properties:
+        bankId:
+          type: integer
+          description: Id of the corresponding Bank
+          format: int64
+          example: 571946715
+        bankType:
+          type: string
+          description: Type of Bank - Domestic/Foreign
+          example: Domestic
+        accountType:
+          type: string
+          description : "Type of Account - Savings/Checking. Only 2 cheking accounts permitted per user" 
+          example: Savings
+        accountOwnerType:
+          type: string
+          description: Type of account owner - Person/Organization
+          example: Person
+        firstName:
+          type: string
+          description: First Name
+          example: James
+        middleName:
+          type: string
+          description: Middle Name
+          example: Miller
+        lastName:
+          type: string
+          description: Last Name
+          example: May
+        suffix:
+          type: string
+          description: Preferred salutation
+          example: Mr
+        primaryBank:
+          type: boolean
+          description: Whether this account is in the users' primary bank
+          example: true
+        status:
+          type: string
+          description: Status of the account - Active/Draft
+          example: Active
+        authenticationMethod:
+          type: string
+          description: Preferred authentication method
+          example: Email
+        transactionType:
+          type: string
+          description: Type of transaction
+          example: Open account
+        communicationChannel:
+          type: string
+          description: Preferred mode of communication
+          example: Phone
+        nickName:
+          type: string
+          description: Can update any number of times
+          example: Joe
+    GetBankAccount:
+      allOf:
+        - type: object
+          properties:
+            accountNo:
+              type: string
+              description: Account Number
+              example: 1f729f7898944113
+            ownerName:
+              type: string
+              description: Owner Name
+              example: Mr James Miller May
+        - $ref: '#/components/schemas/BankAccount'  
+    OwnerDetails:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First Name
+          example: James
+        middleName:
+          type: string
+          description: Middle Name
+          example: Miller
+        lastName:
+          type: string
+          description: Last Name
+          example: May
+        suffix:
+          type: string
+          description: Preferred salutation
+          example: Mr
+  securitySchemes:
+    user_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://localhost:8089/oauth2/authorize
+          scopes:
+            write:users: modify user details and accounts
+            read:users: read user details and accounts
